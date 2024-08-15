@@ -9,12 +9,11 @@ class Section{
 	private $section;
 
 
-	public function __construct($name, $group = '', $groupSub = ''){
+	public function __construct($name, $group = ''){
 		global $CMSSection;
 		$this->section = $CMSSection;
 		$this->name = $name;
 		$this->group = $group;
-		$this->groupSub = $groupSub;
 	}
 
 	public function checkCanView($sectionPermission){
@@ -25,34 +24,20 @@ class Section{
 		$output = array();
 		$temp = array();
 		$permission = $this->getPermissionByGroupId($gid);  //var_dump($permission);
+
 		foreach($this->section AS $key=>$value){
 			if(isset($value['title'])){  //title item
 				array_push($output, array('title'=>$value['title']));
 			}else if(isset($value['items'])){  //have sub menu
 				$temp = array();
 				foreach($value['items'] AS $key2=>$value2){
-					if(isset($value2['items'])){  //have sub sub menu
-						$temp2 = array();
-						foreach($value2['items'] AS $key3=>$value3){
-							if(array_key_exists($key3, $permission)){
-								if($permission[$key3][0] == 1 || $permission[$key3][1] == 1 || $permission[$key3][2] == 1){
-									array_push($temp2, $value3);
-								}
-							}
+					if(array_key_exists($key2, $permission)){
+						if($permission[$key2][0] == 1 || $permission[$key2][1] == 1 || $permission[$key2][2] == 1){
+							array_push($temp, $value2);
 						}
-						if(!empty($temp2)){
-							array_push($temp, array('name'=>$value2['name'], 'link'=>'', 'icon'=>$value2['icon'], 'sub'=>$temp2));
-						}
-					}else{
-						if(array_key_exists($key2, $permission)){
-							if($permission[$key2][0] == 1 || $permission[$key2][1] == 1 || $permission[$key2][2] == 1){
-								array_push($temp, $value2);
-							}
-						}
-						
 					}
 				}
-				if(isset($temp) && !empty($temp)){  //this level and inside level have permission
+				if(!empty($temp)){
 					array_push($output, array('name'=>$value['name'], 'link'=>'', 'icon'=>$value['icon'], 'sub'=>$temp));
 				}
 			}else{  //no sub menu
@@ -64,7 +49,7 @@ class Section{
 			}
 		}
 
-		//echo '<pre>';var_dump($output);echo '</pre>';  //exit;
+		//echo '<pre>';var_dump($output);echo '</pre>';
 		return $output;
 	}
 
@@ -73,23 +58,15 @@ class Section{
 		foreach($this->section AS $key => $value){
 			if(isset($value['items'])){  //sub
 				array_push($output, array('', $value['name']));
-
 				foreach($value['items'] AS $key2 => $value2){
-					if(isset($value2['items'])){  //have sub sub menu
-						array_push($output, array('', '&nbsp;&nbsp;&nbsp;&nbsp;'.$value2['name']));
-						foreach($value2['items'] AS $key3=>$value3){
-							array_push($output, array($key3, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$value3['name']));
-						}
-					}else{
-						array_push($output, array($key2, '&nbsp;&nbsp;&nbsp;&nbsp;'.$value2['name']));
-					}
+					array_push($output, array($key2, '&nbsp;&nbsp;&nbsp;&nbsp;'.$value2['name']));
 				}
 			}else{
 				$temp = (isset($value['name']))?$value['name']:'';
 				array_push($output, array($key, $temp));
 			}
 		}
-		//var_dump($output);exit;
+		//var_dump($output);
 		return $output;
 	}
 
@@ -145,7 +122,7 @@ class Section{
 	public function getPermissionBySection($section){
 		$output = array();
 
-		$gId = (isset($_SESSION['sales_groupId']))?$_SESSION['sales_groupId']:0;
+		$gId = (isset($_SESSION['groupId']))?$_SESSION['groupId']:0;
 		$list = $this->getListCMS($gId, $section);
 		if($list !== false && count($list) == 1){
 			$output = array($list[0]['read_'], $list[0]['write_'], $list[0]['approve_']);
@@ -156,24 +133,73 @@ class Section{
 	}
 
 	public function run(){
-		if($this->group == ''){  //single level
+		if($this->group == ''){
 			if(isset($this->section[$this->name]) && is_array($this->section[$this->name])){
 				return $this->section[$this->name];
 			}else{
 				return false;
 			}
 		}else{
-			if(isset($this->section[$this->group]['items'][$this->name]) && is_array($this->section[$this->group]['items'][$this->name])){  //sub
+			if(isset($this->section[$this->group]['items'][$this->name]) && is_array($this->section[$this->group]['items'][$this->name])){
 				return $this->section[$this->group]['items'][$this->name];
-			}elseif(isset($this->section[$this->group]['items'][$this->groupSub]['items'][$this->name]) 
-				&& is_array($this->section[$this->group]['items'][$this->groupSub]['items'][$this->name])){  //sub sub
-				return $this->section[$this->group]['items'][$this->groupSub]['items'][$this->name];
 			}else{
 				return false;
 			}
 		}
 	}
 
-}//class
+}
+
+//support only 2 levels
+/*
+"[$name]" => array(
+	"name" => "[display name in menu]"
+	, "link" => "[link in menu]"
+	, "icon" => "cil-xxxx"
+	, "items" => array(
+		"ourTeam" => array(
+			"name" => "[display name in menu]"
+			, "link" => "xxx_list.php"
+			, "icon" => "cil-xxx"
+			, "sort" => true
+			, "create" => true
+		)
+	)
+)
+*/
+$CMSSection = array(
+	"titleSetting" => array(
+		"title" => "Setting"
+	)
+/*	, "staff" => array(
+		"name" => "Staff Info"
+		, "link" => "staff_list.php"
+		, "icon" => "icon-user-tie"
+		, "sort" => false
+		, "create" => true
+	)*/
+	, "admin" => array(
+		"name" => "Admin"
+		, "link" => "group"
+		, "icon" => "cil-settings"
+		, "items" => array(
+			"admin" => array(
+				"name" => "User"
+				, "link" => "admin_list.php"
+				, "icon" => "cil-user"
+				, "sort" => false
+				, "create" => true
+			)
+			, "adminGroup" => array(
+				"name" => "User Group"
+				, "link" => "adminGroup_list.php"
+				, "icon" => "cil-people"
+				, "sort" => false
+				, "create" => true
+			)
+		)
+	)
+
+);
 
 ?>

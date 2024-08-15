@@ -3,20 +3,6 @@ $FILE_ROOT = '../';
 $group = 'admin';
 $name = 'adminGroup';
 include_once('../inc/views/header.php');
-
-if($mode == 'js'){
-	header('Content-Type: application/javascript');
-?>
-var approvalTitleBind = 'xxxxx';  //xxxxx when not use
-//ckeditor, ckfinder
-var ckfinderResourceType = '';
-var ckEditorCallBackFn = function(){};
-var ckEditorOptsCustom_heading = undefined;
-//var ckEditorOptsCustom_toolbar = undefined;
-<?php
-	exit;
-}
-
 include_once('../inc/HtmlBuilderCMS.php');
 $form = new HtmlBuilderCMS();
 
@@ -29,7 +15,7 @@ $item = $items[0];
 
 //default
 $layout = assignCMSControlBtnPermission(
-	array(true, true, 'normal', true, false, false, false),
+	array(true, true, 'normal', true, true, false, false, false, false),
 	$sectionPermission
 );
 
@@ -37,15 +23,21 @@ $sectionModel = new Section('');
 $sectionModelList = $sectionModel->getCMSSection(); //echo '<pre>';var_dump($sectionModelList);echo '</pre>';
 $sectionModelListCMS = $sectionModel->getPermissionByGroupId($id); //echo '<pre>';var_dump($sectionModelListCMS);echo '</pre>';
 
+//default
+$layout = assignCMSControlBtnPermission(
+	array(true, true, 'normal', true, false, false, false, false),
+	$sectionPermission
+);
+
 //permission overwrite
 if($id == 1){
 	$layout['statusSwitch'] = false;
 	$layout['deleteBtn'] = false;
 }
 ?>
-<script src="views/<?php echo $name; ?>_edit.php?mode=js"></script>
-<script src="js/edit.js"></script>
-<script src="js/edit.php"></script>
+<!--script src="js/edit.js"></script-->
+
+<script src="js/edit.js?v=<?php echo $version; ?>"></script>
 <form id="myForm" name="myForm" class="form-horizontal" action="views/<?php echo $name; ?>_save.php">
 	<div class="col-lg-12 edit-page">
 		<a href="<?php echo $name; ?>_list.php" class="btn btn-back c-xhr-link"><i class="icon-arrow_back_ios mr-1"></i>Back</a>
@@ -56,31 +48,41 @@ if($id == 1){
 echo $form->htmlInputText('Title', 'title', $item['title'], '', 255, 'required');
 echo $form->htmlTextarea('Description', 'description', $item['description'], '', 255, 'required');
 ?>
-		<div class="row mb-3">
-			<div class="col-sm-3"><h6>Page</h6></div>
-			<div class="col-sm-3 col-4"><h6>Read</h6></div>
-			<div class="col-sm-3 col-4"><h6>Write</h6></div>
-			<div class="col-sm-3 col-4"><h6>Approve</h6></div>
-		</div>
+				<div class="row mb-3">
+					<div class="col-sm-3"><h6>Page</h6></div>
+					<div class="col-sm-3 col-4"><h6>Read</h6></div>
+					<div class="col-sm-3 col-4"><h6>Write</h6></div>
+					<div class="col-sm-3 col-4"><h6>Approve</h6></div>
+				</div>
 <?php
 foreach($sectionModelList AS $key => $value){
 	if($value[1] == '') continue;
 	if($id == 1){  //fixed value if it is admingroup id = 1
 ?>
-		<div class="row mb-3">
+				<div class="row mb-3">
+					<div class="col-sm-3 mb-2"><?php echo ($value[0] != '')?$value[1]:'<h6>'.$value[1].'</h6>'; ?></div>
+					<div class="col-sm-3 col-4"><?php echo ($value[0] != '')?renderFormSwitch(true, '', 'r[]', $value[0]):''; ?></div>
+					<div class="col-sm-3 col-4"><?php echo ($value[0] != '')?renderFormSwitch(true, '', 'w[]', $value[0]):''; ?></div>
+					<div class="col-sm-3 col-4"><?php echo ($value[0] != '')?renderFormSwitch(true, '', 'a[]', $value[0]):''; ?></div>
+				</div>
+<?php }else{ ?>
+	<?php if($value[0] == 'submitApproval'){
+		?>
+		<div class="row mb-3" style="display:none;">
 			<div class="col-sm-3 mb-2"><?php echo ($value[0] != '')?$value[1]:'<h6>'.$value[1].'</h6>'; ?></div>
 			<div class="col-sm-3 col-4"><?php echo ($value[0] != '')?renderFormSwitch(true, '', 'r[]', $value[0]):''; ?></div>
 			<div class="col-sm-3 col-4"><?php echo ($value[0] != '')?renderFormSwitch(true, '', 'w[]', $value[0]):''; ?></div>
 			<div class="col-sm-3 col-4"><?php echo ($value[0] != '')?renderFormSwitch(true, '', 'a[]', $value[0]):''; ?></div>
 		</div>
-<?php }else{ ?>
-		<div class="row mb-3">
-			<div class="col-sm-3 mb-2"><?php echo ($value[0] != '')?$value[1]:'<h6>'.$value[1].'</h6>'; ?></div>
-			<div class="col-sm-3 col-4"><?php echo ($value[0] != '')?renderFormSwitch( isset($sectionModelListCMS[$value[0]]) ? $sectionModelListCMS[$value[0]][0] : false, '', 'r[]', $value[0]):''; ?></div>
-			<div class="col-sm-3 col-4"><?php echo ($value[0] != '')?renderFormSwitch( isset($sectionModelListCMS[$value[0]]) ? $sectionModelListCMS[$value[0]][1] : false, '', 'w[]', $value[0]):''; ?></div>
-			<div class="col-sm-3 col-4"><?php echo ($value[0] != '')?renderFormSwitch( isset($sectionModelListCMS[$value[0]]) ? $sectionModelListCMS[$value[0]][2] : false, '', 'a[]', $value[0]):''; ?></div>
-		</div>
+	<?php }else{ ?>
+				<div class="row mb-3">
+					<div class="col-sm-3 mb-2"><?php echo ($value[0] != '')?$value[1]:'<h6>'.$value[1].'</h6>'; ?></div>
+					<div class="col-sm-3 col-4"><?php echo ($value[0] != '')?renderFormSwitch( isset($sectionModelListCMS[$value[0]]) ? $sectionModelListCMS[$value[0]][0] : false, '', 'r[]', $value[0]):''; ?></div>
+					<div class="col-sm-3 col-4"><?php echo ($value[0] != '')?renderFormSwitch( isset($sectionModelListCMS[$value[0]]) ? $sectionModelListCMS[$value[0]][1] : false, '', 'w[]', $value[0]):''; ?></div>
+					<div class="col-sm-3 col-4"><?php echo ($value[0] != '')?renderFormSwitch( isset($sectionModelListCMS[$value[0]]) ? $sectionModelListCMS[$value[0]][2] : false, '', 'a[]', $value[0]):''; ?></div>
+				</div>
 <?php
+		}
 	}
 }
 ?>

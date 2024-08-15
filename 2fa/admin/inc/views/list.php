@@ -1,17 +1,17 @@
 ajaxLink = 'views/<?php echo $name; ?>_list.php?mode=json<?php echo ($pid)?'&pid='.$pid:''; ?>';  //ajaxLink = 'views/demo.json';
+
 sortLink = 'views/<?php echo $name; ?>_save.php?action=sort<?php echo ($pid)?'&pid='.$pid:''; ?>';
 statusLink = 'views/<?php echo $name; ?>_save.php?action=statusUpdate<?php echo ($pid)?'&pid='.$pid:''; ?>';
 publishLink = 'views/<?php echo $name; ?>_save.php?action=publishUpdate<?php echo ($pid)?'&pid='.$pid:''; ?>';
-approvalLink = 'views/<?php echo $name; ?>_save.php?action=approvalUpdate<?php echo ($pid)?'&pid='.$pid:''; ?>';
-exportFile = [];
 
-pageLength = <?php echo ($name == 'admin') ? '-1' : $setting->CMS_ITEM_PAGE; ?>;
+pageLength = <?php echo $setting->CMS_ITEM_PAGE; ?>;
 
 // for submit approval
-//approval_pid = '<?php echo $pid; ?>';
+approval_pid = '<?php echo $pid; ?>';
 section_name = '<?php echo $name; ?>';
 
 callBack = ()=> {
+
 	var html = '';
 
 <?php if($pid){ ?>

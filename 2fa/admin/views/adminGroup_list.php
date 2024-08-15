@@ -2,6 +2,8 @@
 $FILE_ROOT = '../';
 $group = 'admin';
 $name = 'adminGroup';
+//$nameP = '';
+//$selfPid = '';
 include_once('../inc/views/header.php');
 
 if($mode == 'js'){
@@ -9,16 +11,16 @@ if($mode == 'js'){
 	include_once($FILE_ROOT.'inc/views/list.php');
 ?>
 var columns = [
-	{'data':'id'},
-	{'data':'title'},
-	{'data':'description'},
-	{'data':'status', 'class':'dt-center'},
-	{'data':'action', "orderable":false, 'class':'dt-center'},
+    {'data':'id'}
+	, {'data':'title'}
+    , {'data':'description'}
+    , {'data':'status', 'class':'dt-center'}
+    , {'data':'action', "orderable":false, 'class':'dt-center'}
 ];
 var columnDefs = [
 	//{targets: [0, 1], visible: false}
 ];
-var order = [[0, "asc"]];
+var order = [[0, "desc"]];
 var paginate = true;
 listDataTableCallBack = null;  //must be set in every xxxx_list.php
 <?php
@@ -42,19 +44,19 @@ listDataTableCallBack = null;  //must be set in every xxxx_list.php
 			<thead>
 				<tr>
 					<th>ID</th>
-					<th>Title</th>
+					<th>Username</th>
 					<th>Description</th>
 					<th>Status</th>
-					<th>Action&nbsp;&nbsp;&nbsp;&nbsp;</th>
+					<th>Action</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
 					<th>ID</th>
-					<th>Title</th>
+					<th>Username</th>
 					<th>Description</th>
 					<th>Status</th>
-					<th>Action&nbsp;&nbsp;&nbsp;&nbsp;</th>
+					<th>Action</th>
 				</tr>
 			</tfoot>
 		</table>

@@ -1,27 +1,18 @@
 $(function(){
-	$('#sidebar .c-sidebar-nav-title').each(function(){
-		if( !($(this).next().hasClass('c-sidebar-nav-dropdown')
-			|| $(this).next().hasClass('c-sidebar-nav-item')
-		)){
-			$(this).hide();
-		}
-	});
-
-	//left menu item, and listing back button
 	$('#sidebar a.c-sidebar-nav-link').on('click', function(){
 		//console.log($(this).html());
 		if(table) table.datatable.state.clear();
 	});
-	
+
 	window['$imageCropModal'] = new coreui.Modal(document.getElementById('imageCropModal'), {
-		keyboard: false, 
-		backdrop: 'static',  //true, click to close
+		keyboard: false
+		, backdrop: 'static' //true, click to close
 	});
 });
 
 $(window).on('load', function(){
 	crop = new Crop();
-	
+
 	document.getElementById('imageCropModal').addEventListener('shown.coreui.modal', function () {
 		//do nothing
 	});
@@ -40,11 +31,11 @@ class Crop{
 		this.uploadedImageType = 'image_jpeg';
 		this.$inputImage = document.getElementById('cropInputImage');
 		this._default = [
-			[600, 400], 
-			[250, 250], 
+			[600, 400]
+			, [250, 250]
 		];
 		this.custom = [];
-		
+
 		this.init();
 	}
 	init(){
@@ -54,7 +45,7 @@ class Crop{
 			if(!self.cropper){
 				self.createCropper();
 			}
-			
+
 			var files = this.files;
 			var file;
 
@@ -98,7 +89,7 @@ class Crop{
 		}else{
 			this.createButton(this.custom);
 		}
-		
+
 		var r;
 		if(this.custom.length == 0){
 			r = this._default[0][0]/this._default[0][1];
@@ -108,8 +99,12 @@ class Crop{
 		var image = document.querySelector('#'+this.imageTagId);
 		this.cropper = new Cropper(image, {
 			aspectRatio: r,
-			ready: function () {},
-			cropmove: function () {},
+			ready: function () {
+
+			},
+			cropmove: function () {
+
+			},
 		});
 	}//fn createCropper
 	open(){
@@ -125,8 +120,25 @@ class Crop{
 	}
 }//class crop
 
-//crawler
-function crawler(section, links){//links need be an array
+// crawler
+
+function crawler(link){
+	return;
+	if(link.slice(-1) != '/'){
+		link = link + '/';
+	}
+	$.ajax({
+			type: "POST",
+			url: '../crawler/update/',
+			data: {'link': link},
+			success: function(data){
+			},
+			error: function(data){
+			},
+		})
+}
+
+function bulk_crawler(section, links){
 	for (var i = 0; i < links.length; i++) {
 		links[i] = section + links[i];
 		if(links[i].slice(-1) != '/'){
@@ -135,39 +147,155 @@ function crawler(section, links){//links need be an array
 	}
 
 	$.ajax({
-		type: "POST",
-		url: '../crawler/update/',
-		data: {'link': links},
-		success: function(data){},
-		error: function(data){},
+			type: "POST",
+			url: '../crawler/update/',
+			data: {'link': links},
+			success: function(data){
+			},
+			error: function(data){
+			},
+		})
+
+}
+/*var modalAry = ['clearCacheModel'];
+
+modalAry.forEach(function(value, index, array){
+	window['$'+value] = new coreui.Modal(document.getElementById(value), {
+		keyboard: false
+		, backdrop: 'static' //true, click to close
 	});
-}
-//crawler end
 
-// Cookies
-function cookieGet(c_name) {
-	var c_value = document.cookie;
-	var c_start = c_value.indexOf(" " + c_name + "=");
-	if (c_start == -1){
-		c_start = c_value.indexOf(c_name + "=");
+	window[value+'Close'] = ()=>{
+		window['$'+value].hide();
 	}
-	if (c_start == -1){
-		c_value = null;
-	}else{
-		c_start = c_value.indexOf("=", c_start) + 1;
-		var c_end = c_value.indexOf(";", c_start);
-		if (c_end == -1){
-			c_end = c_value.length;
+
+	window[value+'Open'] = ()=>{
+		window['$'+value].show();
+	}
+});*/
+window['$clearCacheModal'] = new coreui.Modal(document.getElementById('clearCacheModal'), {
+	keyboard: false
+	, backdrop: 'static' //true, click to close
+});
+window['clearCacheModalClose'] = ()=>{
+	window['$clearCacheModal'].hide();
+}
+
+function updateSitemap(){
+	$.ajax({
+			type: "POST",
+			url: '../../gensitemap/',
+			data: '',
+			success: function(data){
+				console.log('update Sitemap');
+			//	clearCacheModalClose();
+				//$('#clearCacheModal').hide();
+			}
+		})
+}
+function updateBankApi(){
+	console.log('updateBankApi');
+	$.ajax({
+			type: "POST",
+			url: '../../home/update_bank/',
+			data: 'type=bank',
+			dataType: "json",
+			success: function(data){
+				console.log(data);
+				$(data).each(function(i, item){
+					console.log(item);
+					var temp = JSON.stringify(item);
+
+					$.ajax({
+							type: "POST",
+							url: '../../home/update_bank/',
+							data: 'type=process&data=' + temp,
+							dataType: "json",
+							success: function(data){
+								console.log(data);
+							}
+						})
+				})
+			//	console.log('update updateBankApi');
+			//	clearCacheModalClose();
+				//$('#clearCacheModal').hide();
+			}
+		})
+}
+
+function clearCache(){
+	$.ajax({
+			type: "POST",
+			url: '../../clear-cache/',
+			data: '',
+			success: function(data){
+				console.log('Clear Cache');
+				clearCacheModalClose();
+				//$('#clearCacheModal').hide();
+			}
+		})
+}
+
+function createCache(page){
+	if(page.indexOf('//') > 1) return;
+	$.ajax({
+		type: "POST",
+		url: page,
+		data: '',
+		success: function(){
+			console.log('createCache');
+			//$('#clearCacheModal').hide();
 		}
-		c_value = unescape(c_value.substring(c_start,c_end));
-	}
-	return c_value;
+	})
 }
 
-function cookieSet(c_name, value, exdays) {
-	if(typeof exdays == 'undefined') exdays = 1;
-	var exdate = new Date();
-	exdate.setTime(exdate.getTime() + (exdays*24*60*60*1000) );
-	var c_value = escape(value) + "; path=/; expires="+exdate.toUTCString();
-	document.cookie = c_name + "=" + c_value;
+function downloadPdf(code){
+	// Create a new link
+	$.ajax({
+		type: "POST",
+		url: '../../apply-now/download-pdf/',
+		data: 'code=' + code + '&regen=true',
+		success: function(data){
+			console.log(data);
+			const anchor = document.createElement('a');
+			//anchor.href = '../temp_pdf/' + code + '.pdf';
+			anchor.href = '../' + data;
+			//anchor.download = code + '.pdf' ;
+			let tempAry = data.split('/');
+			anchor.download = tempAry[tempAry.length -1];
+			// Append to the DOM
+			document.body.appendChild(anchor);
+			// Trigger `click` event
+			anchor.click();
+			// Remove element from DOM
+			document.body.removeChild(anchor);
+		}
+	})
+	return;
+
+}
+
+function downloadPdf_midland(code){
+	// Create a new link
+	$.ajax({
+		type: "POST",
+		url: '../../midland-apply-now/download-pdf/',
+		data: 'code=' + code + '&regen=true',
+		success: function(data){
+			console.log(data);
+			const anchor = document.createElement('a');
+			//anchor.href = '../temp_midland_pdf/' + code + '.pdf';
+			anchor.href = '../' + data;
+			//anchor.download = code + '.pdf' ;
+			let tempAry = data.split('/');
+			anchor.download = tempAry[tempAry.length -1];
+			// Append to the DOM
+			document.body.appendChild(anchor);
+			// Trigger `click` event
+			anchor.click();
+			// Remove element from DOM
+			document.body.removeChild(anchor);
+		}
+	})
+	return;
 }

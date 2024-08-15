@@ -3,8 +3,8 @@
 		<div class="row">
 			<div class="col-sm-6 col-md-4">
 				<div class="card">
-					<div class="card-header">Cash Rebate</div>
-					<!-- <div class="card-body"></div> -->
+					<div class="card-header">Welcome</div>
+					<div class="card-body">Please choose section from left menu.</div>
 				</div>
 			</div>
 		</div>

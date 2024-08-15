@@ -9,17 +9,15 @@ if($mode == 'js'){
 	include_once($FILE_ROOT.'inc/views/list.php');
 ?>
 var columns = [
-	{'data':'id'},
-	{'data':'login'},
-	{'data':'group'},
-	{'data':'email'},
-	{'data':'status', 'class':'dt-center'},
-	{'data':'action', "orderable":false, 'class':'dt-center'},
+    {'data':'id'}
+    , {'data':'login'}
+    , {'data':'status', 'class':'dt-center'}
+    , {'data':'action', "orderable":false, 'class':'dt-center'}
 ];
 var columnDefs = [
 	//{targets: [0, 1], visible: false}
 ];
-var order = [[0, "asc"]];
+var order = [[0, "desc"]];
 var paginate = true;
 listDataTableCallBack = null;  //must be set in every xxxx_list.php
 <?php
@@ -44,20 +42,16 @@ listDataTableCallBack = null;  //must be set in every xxxx_list.php
 				<tr>
 					<th>ID</th>
 					<th>Username</th>
-					<th>Group</th>
-					<th>Email</th>
 					<th>Status</th>
-					<th>Action&nbsp;&nbsp;&nbsp;&nbsp;</th>
+					<th>Action</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
 					<th>ID</th>
 					<th>Username</th>
-					<th>Group</th>
-					<th>Email</th>
 					<th>Status</th>
-					<th>Action&nbsp;&nbsp;&nbsp;&nbsp;</th>
+					<th>Action</th>
 				</tr>
 			</tfoot>
 		</table>

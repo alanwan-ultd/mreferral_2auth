@@ -44,9 +44,9 @@ if($action == 'save'){  //insert/update record
 		'description' => $util->purifyCheck($util->returnData('description', 'post')),
 		'status' => $util->purifyCheck($util->returnData('status', 'post', 'P')),
 		//'approveDateTime' => date('Y-m-d H:i:s'), 
-		//'approveBy' => $_SESSION['sales_login'], 
+		//'approveBy' => $_SESSION['login'], 
 		//'approve' => $util->purifyCheck($util->returnData('approve', 'post')),
-		'lastModifyBy' => $_SESSION['sales_login'], 
+		//'lastModifyBy' => $_SESSION['login'], 
 		'lastModifyDateTime' => date('Y-m-d H:i:s')
 	);
 	if($id == 1){  //admin
@@ -55,21 +55,22 @@ if($action == 'save'){  //insert/update record
 	}else if($id > 1){
 		$data['id'] = $id;
 	}else if($id == 0){  //new item
-		$data['createBy'] = $_SESSION['sales_login'];
+		$data['createBy'] = $_SESSION['login'];
 		$data['createDateTime'] = date('Y-m-d H:i:s');
 	}
+	$password = $util->purifyCheck($util->returnData('password', 'post'));
+	if(trim($password) != ''){
+		$data['password'] = md5($password);
+	}
+	
 	//var_dump($data);exit();
 	$rst = $model->saveItemById($data, $id);
 	if($id == 0){  //new
 		$id = $rst;
 	}
 	//echo ($rst)?'t':'f';
-	//var_dump($rst);
-	if($rst === false){
-		//echo $db->getSql();
-		//var_dump($db->getBind());
-		echo 'f';exit;
-	}
+	//echo $db->getSql();
+	//var_dump($db->getBind());
 	
 	$sectionModel = new Section('');
 	$sectionModelList = $sectionModel->getCMSSection(); //var_dump($sectionModelList); exit;
@@ -87,7 +88,7 @@ if($action == 'save'){  //insert/update record
 				, 'read_'=>(array_search($value[0], $r) !== false || $id == 1)?'1':'0'
 				, 'write_'=>(array_search($value[0], $w) !== false || $id == 1)?'1':'0'
 				, 'approve_'=>(array_search($value[0], $a) !== false || $id == 1)?'1':'0'
-				, 'createBy'=>$_SESSION['sales_login']
+				, 'createBy'=>$_SESSION['login']
 				, 'createDateTime'=>date('Y-m-d H:i:s')
 				, 'lastModifyDateTime'=>date('Y-m-d H:i:s')
 				, 'lastModifyBy'=>''
@@ -95,6 +96,7 @@ if($action == 'save'){  //insert/update record
 				, 'deleted'=>'N'
 			);  //var_dump($data2);
 			$rst = $model->savePermissionBygId($data2, $id);
+			//var_dump($data2);
 			//echo $db->getSql();
 			//var_dump($db->getBind());
 		}
@@ -102,5 +104,7 @@ if($action == 'save'){  //insert/update record
 	
 	echo 't';
 }
+
+
 
 ?>

@@ -2,10 +2,9 @@
 $FILE_ROOT = '../';
 $group = 'admin';
 $name = 'admin';
-$sectionPermissionByPass = true;
 include_once('../inc/views/header.php');
 
-if(isset($_SESSION['sales_id']) && intval($_SESSION['sales_id']) == intval($id) && $action == 'save'){
+if(isset($_SESSION['id']) && intval($_SESSION['id']) == intval($id) && $action == 'save'){
 	// can pass if same user.
 }elseif(!$sectionPermission[1]){
 	echo 'f';exit();
@@ -46,28 +45,19 @@ if($action == 'status'){  //update status
 }
 
 if($action == 'save'){  //insert/update record
-	$login = $util->purifyCheck($util->returnData('login', 'post'));
-	$groupId = $util->purifyCheck($util->returnDataNum('group', 'post'));
-
-	$isDuplicateLogin = $model->checkDuplicateUsername($id, $login);
-	if($isDuplicateLogin) {
-		echo 'Duplicate username, please change other name for login.';
-		return;
-	}
-
 	if($sectionPermission[1]){  //admin insert/update
+		$login = $util->purifyCheck($util->returnData('login', 'post'));
 		$data = array(
 			'login' => $login,
 			'name' => $util->purifyCheck($util->returnData('name', 'post')),
 			'email' => $util->purifyCheck($util->returnData('email', 'post')),
-			'phone' => $util->purifyCheck($util->returnData('phone', 'post', 'P')),
 			'description' => $util->purifyCheck($util->returnData('desc', 'post')),
-			'groupId' => $groupId,
+			'groupId' => $util->purifyCheck($util->returnDataNum('group', 'post')),
 			'status' => $util->purifyCheck($util->returnData('status', 'post', 'P')),
 			//'approveDateTime' => date('Y-m-d H:i:s'), 
-			//'approveBy' => $_SESSION['sales_login'], 
+			//'approveBy' => $_SESSION['login'], 
 			//'approve' => $util->purifyCheck($util->returnData('approve', 'post')),
-			'lastModifyBy' => $_SESSION['sales_login'], 
+			'lastModifyBy' => $_SESSION['login'], 
 			'lastModifyDateTime' => date('Y-m-d H:i:s')
 		);
 		if($id == 1){  //admin
@@ -78,58 +68,26 @@ if($action == 'save'){  //insert/update record
 			$data['id'] = $id;
 		}else if($id == 0){  //new item
 			$data['lastLoginDateTime'] = '1000-01-01 00:00:00';
-			$data['createBy'] = $_SESSION['sales_login'];
+			$data['createBy'] = $_SESSION['login'];
 			$data['createDateTime'] = date('Y-m-d H:i:s');
 		}
 		$password = $util->purifyCheck($util->returnData('password', 'post'));
-		$confirm_password = $util->purifyCheck($util->returnData('confirm_password', 'post'));
-
-		if ($password != $confirm_password) {
-            echo '<p>Please make suer your passwords match.</p>';
-            return;
-        }
-
 		if(trim($password) != ''){
-			// $data['password'] = md5($password);  //admin can set any password
-
-			$uppercase = preg_match('@[A-Z]@', $password);
-            $lowercase = preg_match('@[a-z]@', $password);
-            $number    = preg_match('@[0-9]@', $password);
-            $specialChars = preg_match('@[^\w]@', $password);
-            
-            if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8  || strlen($password) > 20) {
-                echo '<p>Password does not meet requirements</p>';
-                exit();
-            }
-            
-            $data['password'] = md5($password);
+			$data['password'] = md5($password);
 		}else if($id == 0){  //new item without password
 			echo '<p>Password cannot be empty</p>';exit();
 		}
 	}else{  //user hisself/herself
 		$data = array(
-			// 'name' => $util->purifyCheck($util->returnData('name', 'post')),
-			// 'email' => $util->purifyCheck($util->returnData('email', 'post')),
-			// 'phone' => $util->purifyCheck($util->returnData('phone', 'post', 'P')),
-			// 'description' => $util->purifyCheck($util->returnData('desc', 'post')),
-			// 'profile_pic' => $util->purifyCheck($util->returnData('profile_pic', 'post', 'P')),
-			'signature_1' => $util->purifyCheck($util->returnData('signature_1', 'post', 'P')),
-			'signature_2' => $util->purifyCheck($util->returnData('signature_2', 'post', 'P')),
-			'signature_3' => $util->purifyCheck($util->returnData('signature_3', 'post', 'P')),
+			'name' => $util->purifyCheck($util->returnData('name', 'post')),
+			'description' => $util->purifyCheck($util->returnData('desc', 'post')),
 			//'approveDateTime' => date('Y-m-d H:i:s'), 
-			//'approveBy' => $_SESSION['sales_login'], 
+			//'approveBy' => $_SESSION['login'], 
 			//'approve' => $util->purifyCheck($util->returnData('approve', 'post')),
-			'lastModifyBy' => $_SESSION['sales_login'], 
+			'lastModifyBy' => $_SESSION['login'], 
 			'lastModifyDateTime' => date('Y-m-d H:i:s')
 		);
 		$password = $util->purifyCheck($util->returnData('password', 'post'));
-		$confirm_password = $util->purifyCheck($util->returnData('confirm_password', 'post'));
-
-		if ($password != $confirm_password) {
-            echo '<p>Please make suer your passwords match.</p>';
-            return;
-        }
-
 		if(trim($password) != ''){
 			$uppercase = preg_match('@[A-Z]@', $password);
 			$lowercase = preg_match('@[a-z]@', $password);
@@ -155,13 +113,12 @@ if($action == 'save'){  //insert/update record
 	if($rst){
 		echo 't';
 	}else{
-		echo 'f';
-		// $rst2 = $db->select($setting->DB_PREFIX.'adminuser', 'login=:login', array(':login'=>$login));
-		// if($rst2 !== false && count($rst2) >= 1){
-		// 	echo 'Duplicate username, please change other name for login.';
-		// }else{
-		// 	echo 'f';
-		// }
+		$rst2 = $db->select($setting->DB_PREFIX.'adminuser', 'login=:login', array(':login'=>$login));
+		if($rst2 !== false && count($rst2) >= 1){
+			echo 'e';
+		}else{
+			echo 'f';
+		}
 	}
 	//echo $db->getSql();
 	//var_dump($db->getBind());

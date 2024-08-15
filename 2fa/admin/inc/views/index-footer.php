@@ -4,20 +4,15 @@
 		<footer class="c-footer">
 			<div class="ml-auto">© <?php echo $setting->CMS_COPYRIGHT_YEAR; ?> <?php echo $setting->CMS_COMPANY_NAME; ?></div>
 		</footer>
-
-		<div id="preloader">
-			<div class="overlay"></div>
-			<img src='assets/img/common/loading.gif'>
-		</div>
 	</div>
 </div>
 
-<?php echo renderModal('loadingModal', 'info', 'Loading', 'Please wait...', false, false); ?>
-<?php echo renderModal('successModal', 'success', 'Save', '<p>Record saved.</p>', true, false, 'onclick="cash_rebate.reloadPage();"'); ?>
+<?php echo renderModal('loadingModal', '', 'Loading', 'Please wait...', false, false); ?>
+<?php echo renderModal('successModal', 'success', 'Save', '<p>Record saved.</p>', true, false); ?>
 <?php echo renderModal('warningModal', 'warning', 'Error', '<p>Record cannot be saved.</p>', true, false); ?>
-<?php echo renderModal('warningEmailModal', 'warning', 'Error', '<p>Email cannot be send.</p>', true, false, 'onclick="cash_rebate.reloadPage();"'); ?>
-<?php echo renderModal('successApprovalModal', 'success', 'Approval', '<p>Case approved.</p>', true, false, 'onclick="cash_rebate.reloadPage();"'); ?>
-<?php echo renderModal('successRejectModal', 'success', 'Rejection', '<p>Case rejected.</p>', true, false, 'onclick="cash_rebate.reloadPage();"'); ?>
+<?php echo renderModal('clearCacheModal', 'success', 'Clear Cache', '<p>Are you sure Clear Cache?</p>', true, true, '', 'onclick="clearCache()"', 'onclick="clearCacheModalClose()"'); ?>
+<?php echo renderModal('sitemapModal', 'success', '', '<p>Updated.</p>', true, false, 'onclick="updateSitemap()"', '', ''); ?>
+<?php echo renderModal('bankapiModal', 'success', '', '<p>Updated.</p>', true, false, 'onclick="updateBankApi()"', '', ''); ?>
 
 <div class="modal fade" id="imageCropModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-xl" role="document">
@@ -50,30 +45,33 @@
 	</div><!-- /.modal-dialog-->
 </div>
 
+
 <!-- CoreUI and necessary plugins-->
-<script src="lib/@coreui/coreui/js/coreui.bundle.min.js"></script>
+<script src="vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
 <!--[if IE]><!-->
-<script src="lib/@coreui/icons/js/svgxuse.min.js"></script>
+<script src="vendors/@coreui/icons/js/svgxuse.min.js"></script>
 <!--<![endif]-->
 <script src="lib/jquery/jquery-3.5.1.min.js"></script>
-<!--link rel="stylesheet" type="text/css" href="lib/DataTables-1.10.21/datatables.min.css"/>
-<script src="lib/DataTables-1.10.21/datatables.min.js"></script-->
-<link rel="stylesheet" type="text/css" href="lib/DataTables-1.10.22/datatables.min.css"/>
-<script src="lib/DataTables-1.10.22/datatables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="lib/DataTables-1.10.21/datatables.min.css"/>
+<script src="lib/DataTables-1.10.21/datatables.min.js"></script>
 <!-- DataTables extension -->
-<!--script src="lib/DataTables-1.10.21/ext/dataTables.rowReorder.min.js"></script>
-<link href="lib/DataTables-1.10.21/ext/rowReorder.dataTables.min.css" rel="stylesheet"-->
+<script src="lib/DataTables-1.10.21/ext/dataTables.rowReorder.min.js"></script>
+<link href="lib/DataTables-1.10.21/ext/rowReorder.dataTables.min.css" rel="stylesheet">
 <!-- DataTables extension -->
 <script src="js/Table.js"></script>
 
 <link rel="stylesheet" href="lib/hyperform-0.12.0/css/hyperform.css">
 <script src="lib/hyperform-0.12.0/js/hyperform.min.js"></script>
-<script src="lib/ckeditor5/19.1.1/custom/build/ckeditor.js"></script>
+<script src="lib/ckeditor5/29.1.0/build/ckeditor.js"></script>
+
 <!--script src="lib/ckeditor5/19.1.1/custom/build/translations/zh.js"></script-->
-<script src="lib/ckfinder3/3.5.1.1/ckfinder.js"></script>
+<script src="lib/ckfinder3/3.4.5/ckfinder.js"></script>
+
+<script src="lib/jQuery-Tags-Input/src/jquery.tagsinput.js"></script>
+
+<!--script src="lib/ckfinder3/3.5.1.1/ckfinder.js"></script-->
 <script src="lib/cropperjs/v1.5.7/cropper.min.js"></script>
-<script src="js/ultd.js"></script>
-<script src="js/cash-rebate.js?v=7"></script>
+<script src="js/ultd.js?v=<?php echo $version; ?>"></script>
 
 <script src="lib/daterangepicker/moment.min.js"></script>
 <script src="lib/daterangepicker/daterangepicker.js"></script>
@@ -81,32 +79,40 @@
 <script src="js/edit.php"></script>
 <script src="lib/Sortable/master/Sortable.js"></script>
 
+
+<script type="text/javascript" src="lib/Buttons-1.6.3/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="lib/Buttons-1.6.3/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="lib/JSZip-2.5.0/jszip.min.js"></script>
+<script type="text/javascript" src="lib/pdfmake-0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="lib/pdfmake-0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="lib/Buttons-1.6.3/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="lib/Buttons-1.6.3/js/buttons.print.min.js"></script>
 <script>
 coreuiAsyncLoadConfig = {
 	defaultPage: 'main.php',
 	errorPage: '404.php',
-	subpagesDirectory: 'views/',
+	subpagesDirectory: 'views/'
 }
 new coreui.AsyncLoad(document.getElementById('ui-view'), coreuiAsyncLoadConfig);
 //var tooltipEl = document.getElementById('header-tooltip');
 //var tootltip = new coreui.Tooltip(tooltipEl);
 
 //var myModal = new coreui.Modal(document.getElementById('myModal'), options);
-const modalAry = ['loadingModal', 'successModal', 'warningModal', 'warningEmailModal', 'successApprovalModal', 'successRejectModal'];
+const modalAry = ['loadingModal', 'successModal', 'warningModal'];
 
 modalAry.forEach(function(value, index, array){
 	window['$'+value] = new coreui.Modal(document.getElementById(value), {
-		keyboard: false, 
-		backdrop: 'static',  //true, click to close
+		keyboard: false
+		, backdrop: 'static' //true, click to close
 	});
 
 	window[value+'Close'] = ()=>{
 		window['$'+value].hide();
-	};
+	}
 
-	window[value+'Open'] = ()=>{
+	window[value+'Open'] = (text = '')=>{
 		window['$'+value].show();
-	};
+	}
 });
 
 </script>

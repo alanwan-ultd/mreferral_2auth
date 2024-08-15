@@ -5,7 +5,6 @@ $(function(){
 	//table.destroy();
 	table = new Table({
 		'ajaxLink': ajaxLink,
-		'approvalLink': approvalLink,
 		'columns': columns,
 		'columnDefs': columnDefs,
 		'order': order,
@@ -14,9 +13,8 @@ $(function(){
 		'publishLink': publishLink,
 		'sortLink': sortLink,
 		'statusLink': statusLink,
-		'export': exportFile,
+		'export': [],
 	});
-
 });
 
 listPage = ()=>{
@@ -24,7 +22,7 @@ listPage = ()=>{
 	table.sortingMode = false;
 	table.datatable.destroy();
 	table.create();
-};
+}
 
 sortPage = ()=>{
 	table.datatable.state.clear();
@@ -33,53 +31,106 @@ sortPage = ()=>{
 	table.datatable.destroy();
 	self.sortLink,
 	table.create(order, false, {"update": false}, false);
-};
+}
 
-multiItemsUpdate = (type, value) => {
+publishUpdate = (approval=false)=>{
 	var rows = table.datatable.rows('.selected');
 	var ids = [];
-	var sectionName = $('.c-sidebar-nav-link.c-active').text();
-	var url = '', data = {}, approval_titles = [], crawlerUrls = [];
+	var titles = [];
+	var urls = [];
+	if(approval){
+		var url = 'views/submitApproval_save.php?action=submitAllItems';
+	}else{
+		var url = table.publishLink;
+	}
+	var section = $('.c-sidebar-nav-link.c-active').text();
+	if(rows[0].length > 0){
+		loadingModalOpen();
+			//console.log(rows);
+			$.each(rows.data(), function(index, value){
+				ids.push($(this)[0].id);
+
+				// if url variable set, will group them to crawl
+				if($(this)[0].url !== undefined && $(this)[0].url) {
+					urls.push($(this)[0].url);
+				}
+			});
+			if(approval){
+				var data = {
+					'ids':ids,
+					'pid':approval_pid,
+					'section': section_name,
+					'section_name': section,
+				};
+			}else{
+				var data = {
+					'ids':ids,
+					'pid':approval_pid,
+					'section': section,
+				};
+			}
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: data,
+				success: function(data){
+					//console.log(data);
+					setTimeout(function(){
+						loadingModalClose();
+							if(data == 't'){
+								if(urls !== undefined && urls.length > 0) {
+									bulk_crawler(crawler_link, urls);
+								}
+								table.datatable.ajax.reload();
+								table.datatable.ajax.reload(function(){}, false);  //not change page
+							successModalOpen();
+							}else{
+								warningModalOpen();
+							}
+					}, 500);
+					clearCache();
+				},
+				error: function(data){
+					//console.log('error'+data);
+					setTimeout(function(){
+						loadingModalClose();
+						warningModalOpen();
+					}, 500);
+				},
+				dataType: 'html'  //xml, json, script, or html
+			});
+	}else{
+	//  warningModalOpen();
+	}
+}
+
+statusUpdate = (value) => {
+	//  var self = this;
+	var rows = table.datatable.rows('.selected');
+	var ids = [];
+	var section = $('.c-sidebar-nav-link.c-active').text();
 
 	if(rows[0].length > 0){
 		loadingModalOpen();
 		//console.log(rows);
-
 		$.each(rows.data(), function(index, value){
-			ids.push($(this)[0].id);
-			if(typeof $(this)[0].url != 'undefined') crawlerUrls.push($(this)[0].url);
-			if(typeof $(this)[0].title_i18n != 'undefined') approval_titles.push($(this)[0].title_i18n);
+				ids.push($(this)[0].id);
 		});
-
-		if(type == 'status'){
-			url = table.statusLink;
-			data = {'ids':ids, 'value':value, 'section_name': sectionName,};
-		}else if(type == 'publish'){
-			url = table.publishLink;
-			data = {'ids':ids, 'section_name': sectionName,};
-		}else if(type == 'approval'){
-			url = table.approvalLink;
-			data = {'ids':ids, 'section_name': sectionName, 'approval_titles': approval_titles,};
-		}
-		
 		$.ajax({
 			type: "POST",
-			url: url,
-			data: data,
+			url: table.statusLink,
+			data: {'ids':ids, 'value':value, 'section': section,},
 			success: function(data){
 				//console.log(data);
 				setTimeout(function(){
 					loadingModalClose();
-					if(data == 't'){
-						//table.datatable.ajax.reload();
-						table.datatable.ajax.reload(function(){}, false);  //not change page
+						if(data == 't'){
+							table.datatable.ajax.reload();
+							table.datatable.ajax.reload(function(){}, false);  //not change page
 						successModalOpen();
-						if(type == 'publish'){
-							crawler('', crawlerUrls);  //ultd.js
+						}else{
+							warningModalOpen();
 						}
-					}else{
-						warningModalOpen();
-					}
 				}, 500);
 			},
 			error: function(data){
@@ -92,18 +143,8 @@ multiItemsUpdate = (type, value) => {
 			dataType: 'html'  //xml, json, script, or html
 		});
 	}else{
-		//do nothing
-	}
-};
+	//  warningModalOpen();
 
-copyToClickBoard = (content) => {
-	if (!navigator.clipboard) {
-		// Clipboard API not available
-		console.log(`copied content: ${content}`)
-		return
+	//  $('#warningStatusModal').modal('show');
 	}
-
-    navigator.clipboard.writeText(content)
-    	.then(() => { console.log("Text copied to clipboard...")})
-        .catch(err => { console.log('Something went wrong', err);})
 }

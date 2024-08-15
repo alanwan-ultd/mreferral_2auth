@@ -21,44 +21,40 @@ class Table{
 	init(){
 		var self = this;
 		self.create(self.order, self.paginate, false, true);
+		$('tbody', self.$table).on( 'click', 'tr', function () {
+			$(this).toggleClass('selected');
+		});
 	}
 	create(order, paginate, rowReorder, searching){
 		var self = this;
 		self.datatable = self.$table.DataTable({
-			//data: data,
-			ajax: self.ajaxLink,
-			/*serverSide: true,
-			ajax: {
-				type: 'POST',  //POST, GET
-				url : self.ajaxLink,
-			},*/
-			//colReorder: colReorder,
-			columns: self.columns,
-			columnDefs: (self.sortingMode)?columnDefsSort:columnDefs,  //variable define in xxx_list.php
-			order: (typeof order != 'undefined')?order:self.order,
-			ordering: (self.sortingMode)?false:true,
-			rowReorder: (typeof rowReorder != 'undefined')?rowReorder:self.rowReorder,
-			retrieve: false,
-			pageLength: (typeof pageLength != 'undefined')?pageLength:10,  //test: 3, default: 10
-			paginate: (typeof paginate != 'undefined')?paginate:self.paginate,
-			searching: (typeof searching != 'undefined')?searching:self.searching,
-			dom: self.dom,
-			buttons: self.buttons,
-			fnDrawCallback: function( oSettings ) {
+			//data: data
+			ajax: self.ajaxLink
+			//, colReorder: colReorder
+			, columns: self.columns
+			, columnDefs: (self.sortingMode)?columnDefsSort:columnDefs
+			, order: (typeof order != 'undefined')?order:self.order
+			, rowReorder: (typeof rowReorder != 'undefined')?rowReorder:self.rowReorder
+			, retrieve: false
+			, pageLength: (typeof pageLength != 'undefined')?pageLength:10
+			, paginate: (typeof paginate != 'undefined')?paginate:self.paginate
+			, searching: (typeof searching != 'undefined')?searching:self.searching
+			, dom: self.dom
+			, buttons: self.buttons
+			, fnDrawCallback: function( oSettings ) {
 				//do nothing
-			},
-			initComplete: function( oSettings ) {
+			}
+			, initComplete: function( oSettings ) {
 				self.dataTable = this;
 				callBack();  //include views list.php
-			},
-			/*stateSave: false,*/stateSave: true,
-			scrollX: true,
-			select: (self.sortingMode)?false:true,  //disable 'select' while sorting
+			}
+			/*, stateSave: false*/, stateSave: true
+			, scrollX: true
 		});
 		if(typeof rowReorder != 'undefined'){
 			if(rowReorder){
 				if(typeof rowReorder.pos != 'undefined' && !rowReorder.pos){
-					//do nothing
+
 				}else{
 					self.reorder();
 				}
@@ -77,10 +73,10 @@ class Table{
 			for( var i=0, ien=diff.length ; i<ien ; i++ ){
 				var id = self.datatable.data()[diff[i].oldPosition].id;
 				var pos = self.datatable.data()[diff[i].newPosition].position;
-				//console.log(id+', '+pos);
+			//	console.log(id+', '+pos);
 				formOrder.push([id, pos]);
 			}
-			//console.log(diff);
+		//	console.log(diff);
 			//console.log(_e); console.log(_diff); console.log(_edit);
 			//console.log(formOrder);
 			//return;
@@ -114,4 +110,4 @@ class Table{
 		});
 	}//reorder function eol
 
-}//class Table end
+}

@@ -5,9 +5,9 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-<meta name="description" content="<?php echo $setting->CMS_HTML_DESC; ?>">
-<meta name="keyword" content="<?php echo $setting->CMS_HTML_KEYWORDS; ?>">
-<title><?php echo $setting->CMS_HTML_TITLE; ?></title>
+<meta name="description" content="Content Management System (CMS)">
+<meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
+<title>Content Management System (CMS)</title>
 <link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
@@ -16,21 +16,19 @@
 <meta name="msapplication-TileColor" content="#da532c">
 <meta name="theme-color" content="#ffffff">
 <!-- Main styles for this application-->
-<link href="css/style.min.css" rel="stylesheet">
-<link href="lib/@coreui/icons/css/free.min.css" rel="stylesheet">
+<link href="css/style.css?v=<?php echo $version; ?>" rel="stylesheet">
+<link href="vendors/@coreui/icons/css/free.min.css" rel="stylesheet">
 <link href="lib/icomoon/style.css" rel="stylesheet">
 <link href="lib/cropperjs/v1.5.7/cropper.min.css" rel="stylesheet">
-<link href="css/ultd.css?v=4" rel="stylesheet">
+<link href="css/ultd.css?v=<?php echo $version; ?>" rel="stylesheet">
 </head>
 <body class="c-app">
 <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
-	<div class="c-sidebar-brand d-none d-md-flex">
-		<img src="./../images/common/mreferral_logo-01.svg" alt="mReferral">
-	</div>
-
 	<ul class="c-sidebar-nav">
 		<li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="main.php">
-			<i class="c-sidebar-nav-icon icon icon-dashboard"></i>Dashboard</a></li>
+			<i class="c-sidebar-nav-icon cil-speedometer"></i>Dashboard</a></li>
+
+
 <?php
 foreach($sectionModelMenu AS $key=>$value){
 	if(isset($value['title'])):
@@ -41,24 +39,9 @@ foreach($sectionModelMenu AS $key=>$value){
 			<a class="c-sidebar-nav-dropdown-toggle" href="#"><i class="c-sidebar-nav-icon <?php echo $value['icon']; ?>"></i><?php echo $value['name']; ?></a>
 			<ul class="c-sidebar-nav-dropdown-items">
 <?php foreach($value['sub'] AS $key2=>$value2){ ?>
-<?php     if(isset($value2['sub'])): ?>
-				<li class="c-sidebar-nav-item">
-					<div class="c-sidebar-nav-dropdown">
-						<a class="c-sidebar-nav-dropdown-toggle" href="#"><i class="c-sidebar-nav-icon <?php echo $value2['icon']; ?>"></i><?php echo $value2['name']; ?></a>
-						<ul class="c-sidebar-nav-dropdown-items">
-<?php         foreach($value2['sub'] AS $key3=>$value3){ ?>
-							<li class="c-sidebar-nav-item">
-								<a class="c-sidebar-nav-link" href="<?php echo $value3['link']; ?>"><i class="c-sidebar-nav-icon <?php echo $value3['icon']; ?>"></i><?php echo $value3['name']; ?></a>
-							</li>
-<?php         } ?>
-						</ul>
-					</div>
-				</li>
-<?php     else: ?>
 				<li class="c-sidebar-nav-item">
 					<a class="c-sidebar-nav-link" href="<?php echo $value2['link']; ?>"><i class="c-sidebar-nav-icon <?php echo $value2['icon']; ?>"></i><?php echo $value2['name']; ?></a>
 				</li>
-<?php     endif; ?>
 <?php } ?>
 			</ul>
 		</li>
@@ -87,11 +70,11 @@ foreach($sectionModelMenu AS $key=>$value){
 		<ul class="c-header-nav ml-auto mr-4">
 			<li class="c-header-nav-item dropdown">
 				<a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-					<i class="c-icon mr-2 cil-people"></i>Hi, <?php echo $_SESSION['sales_name']; ?> (<?php echo $_SESSION['sales_groupTitle']; ?>)
+					<i class="c-icon mr-2 cil-people"></i>Hi, <?php echo $_SESSION['login']; ?>
 				</a>
 				<div class="dropdown-menu dropdown-menu-right pt-0">
 					<div class="dropdown-header bg-light py-2"><strong>Account</strong></div>
-					<a class="dropdown-item c-xhr-link" href="admin_edit.php?id=<?php echo $_SESSION['sales_id']; ?>">
+					<a class="dropdown-item c-xhr-link" href="admin_edit.php?id=<?php echo $_SESSION['id']; ?>">
 						<i class="c-icon mr-2 cil-user"></i>My Profile</a>
 					<a class="dropdown-item" href="login.php">
 						<i class="c-icon mr-2 cil-account-logout"></i>Logout</a>

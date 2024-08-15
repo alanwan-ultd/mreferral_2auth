@@ -6,6 +6,7 @@ class Admin{
 	private $model;
 
 	public function __construct(){
+
 	}
 
 	public function createRawItem(){
@@ -15,11 +16,6 @@ class Admin{
 			'password'=>'',
 			'name'=>'',
 			'email'=>'',
-			'phone'=>'',
-			'profile_pic'=>'',
-			'signature_1'=>'',
-			'signature_2'=>'',
-			'signature_3'=>'',
 			'description'=>'',
 			'groupId'=>'',
 			'status'=>''
@@ -42,20 +38,13 @@ class Admin{
 	public function getListCMS($name){
 		global $db, $setting;
 
-		$rst = $db->select($setting->DB_PREFIX.'adminuser', 'deleted="N"', array(), 'id, email, login, groupId, status');
-		$rst2 = $this->getListGroup();
-
+		$rst = $db->select($setting->DB_PREFIX.'adminuser', 'deleted="N"', array(), 'id, login, status');
 		foreach($rst as $key => $row){
 			switch($row['status']){
 				case 'A': $rst[$key]['status'] = renderListStatusActive('Active'); break;
 				case 'P': $rst[$key]['status'] = renderListStatusPending('Pending'); break;
 			}
 			$rst[$key]['action'] = renderListActionBtn($name.'_edit', $row['id']);
-
-			$rst[$key]['group'] = '';
-			foreach($rst2 as $key2 => $row2){
-				if($row2['id'] == $row['groupId']) $rst[$key]['group'] = $row2['title'];
-			}
 		}
 		return $rst;
 	}
@@ -63,7 +52,7 @@ class Admin{
 	public function getListGroup(){
 		global $db, $setting;
 
-		$rst = $db->select($setting->DB_PREFIX.'admingroup', 'deleted="N" ORDER BY position asc', array(), 'id, title');
+		$rst = $db->select($setting->DB_PREFIX.'admingroup', 'deleted="N" ORDER BY title DESC', array(), 'id, title');
 		return $rst;
 	}
 
@@ -80,19 +69,15 @@ class Admin{
 		global $db, $setting;
 
 		$password = MD5($password);
-		$rst = $db->select($setting->DB_PREFIX.'adminuser u LEFT JOIN '.$setting->DB_PREFIX.'admingroup g ON u.groupId=g.id'
-			, 'u.login=:login AND u.password=:password AND u.status="A" AND u.deleted="N" AND g.status="A" AND g.deleted="N"'
-			, array(':login'=>$login, ':password'=>$password)
-			, 'u.id AS id, u.login AS login, u.groupId AS groupId, u.name AS name, u.noOfLogin AS noOfLogin, g.title AS groupTitle'
+		$rst = $db->select($setting->DB_PREFIX.'adminuser u LEFT JOIN '.$setting->DB_PREFIX.'admingroup g ON u.groupId=g.id', 'u.login=:login AND u.password=:password AND u.status="A" AND u.deleted="N" AND g.status="A" AND g.deleted="N"'
+		, array(':login'=>$login, ':password'=>$password)
+		, 'u.id AS id, u.login AS login, u.groupId AS groupId, u.noOfLogin AS noOfLogin'
 		);
 
 		if($rst !== false && count($rst) == 1){
-			$_SESSION['sales_id'] = $rst[0]['id'];
-			$_SESSION['sales_login'] = $rst[0]['login'];
-			$_SESSION['sales_name'] = $rst[0]['name'];
-			$_SESSION['sales_groupId'] = $rst[0]['groupId'];
-			$_SESSION['sales_groupTitle'] = $rst[0]['groupTitle'];
-			$_SESSION['name'] = $rst[0]['name'];
+			$_SESSION['id'] = $rst[0]['id'];
+			$_SESSION['login'] = $rst[0]['login'];
+			$_SESSION['groupId'] = $rst[0]['groupId'];
 			$this->saveItemById(array(
 				'lastLoginDateTime'=>date('Y-m-d H:i:s'),
 				'noOfLogin'=>intval($rst[0]['noOfLogin']) + 1
@@ -102,6 +87,8 @@ class Admin{
 			session_unset();
 			session_destroy();
 			ini_set('session.gc_maxlifetime', 10800);
+			ini_set('session.cookie_samesite', 'None');
+			ini_set('session.cookie_secure', 'true');
 			session_start();
 			return false;
 		}
@@ -111,34 +98,15 @@ class Admin{
 		global $db, $setting;
 	}*/
 
-	public function checkDuplicateUsername($id, $userName) {
-		global $db, $setting;
-
-		global $db, $setting;
-		$rst = $db->select($setting->DB_PREFIX.'adminuser', 'id!=:id AND login=:login AND deleted="N" LIMIT 1', array(':id' => $id,':login' => $userName), 'id');
-
-		return ($rst) ? true : false;
-	}
-
 	public function saveItemById($data, $id = 0){
 		global $db, $setting;
 
 		if($id == 0){  //new
 			$rst = $db->insert($setting->DB_PREFIX.'adminuser', $data);
 		}else{  //update
-			if( (intval($id) == 1 && intval($_SESSION['sales_id']) == 1) 
-				|| (intval($id) != 1) 
-			){
-				$rst = $db->update($setting->DB_PREFIX.'adminuser', $data, 'id=:id AND deleted="N"', array(':id'=>$id));
-			}else{
-				return false;
-			}
+			$rst = $db->update($setting->DB_PREFIX.'adminuser', $data, 'id=:id AND deleted="N"', array(':id'=>$id));
 		}
 		return $rst;
-	}
-
-	public function hasRole($role) {
-		return intval($_SESSION['sales_groupId']) === $role;
 	}
 }
 
