@@ -1,0 +1,2 @@
+Sitemap: https://www.xxxxxxxxxx.com/sitemap.xml
+User-agent: *

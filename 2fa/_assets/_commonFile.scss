@@ -1,0 +1,192 @@
+$screen-desktop-xl: 1600px;
+$screen-desktop-l: 1360px;
+$screen-desktop: 1025px;
+$screen-tab: 1024px;
+$screen-mobile: 640px;
+$ratio-mobile: 1*5/8;
+
+//color list
+$blue: #00789f;
+$brown: #81592f;
+$gray: #8d8d8d;
+
+@mixin absolute($args: ()) {
+    @include position(absolute, $args);
+}
+@mixin animation($animate...) {
+    $max: length($animate);
+    $animations: '';
+
+    @for $i from 1 through $max {
+        $animations: #{$animations + nth($animate, $i)};
+
+        @if $i < $max {
+            $animations: #{$animations + ", "};
+        }
+    }
+    -webkit-animation: $animations;
+    -moz-animation:    $animations;
+    -o-animation:      $animations;
+    animation:         $animations;
+}
+
+@mixin font($size, $lineHeight, $letterSpacing){
+    font-size: $size;
+    line-height: $lineHeight;
+    @include letter-spacing($letterSpacing);
+}
+
+@mixin keyframes($animationName) {
+    @-webkit-keyframes #{$animationName} {
+        @content;
+    }
+    @-moz-keyframes #{$animationName} {
+        @content;
+    }
+    @-o-keyframes #{$animationName} {
+        @content;
+    }
+    @keyframes #{$animationName} {
+        @content;
+    }
+}
+
+@mixin fixed($args: ()) {
+    @include position(fixed, $args);
+}
+@mixin font-size($size) {
+    font-size: ($size) + px;
+    @media only screen and (max-width: $screen-desktop) {
+        font-size: ($size/2) + px;
+    }
+}
+@mixin font-size-m($size) {
+    font-size: ($size) + px;
+    @media only screen and (max-width: $screen-mobile) {
+        font-size: ($size*$ratio-mobile) + px;
+    }
+}
+@mixin letter-spacing($size) {
+    letter-spacing: ($size/1000*16/12) + em;
+    /*letter-spacing: ($size/1000) + em;*/
+}
+@mixin line-height($size) {
+    line-height: ($size) + px;
+    @media only screen and (max-width: $screen-desktop) {
+        line-height: ($size/2) + px;
+    }
+}
+@mixin line-height-m($size) {
+    line-height: ($size) + px;
+    @media only screen and (max-width: $screen-mobile) {
+        line-height: ($size/2) + px;
+    }
+}
+@mixin position($position, $args: ()) {
+    $offsets: top right bottom left;
+    position: $position;
+
+    @each $offset in $offsets {
+        $index: index($args, $offset);
+
+        @if $index {
+            @if $index == length($args) {
+                #{$offset}: 0;
+            }
+            @else {
+                $next: nth($args, $index + 1);
+                @if is-valid-length($next) {
+                    #{$offset}: $next;
+                }
+                @else if index($offsets, $next) {
+                    #{$offset}: 0;
+                }
+                @else {
+                    @warn "Invalid value `#{$next}` for offset `#{$offset}`.";
+                }
+            }
+        }
+    }
+}
+
+@mixin relative($args: ()) {
+    @include position(relative, $args);
+}
+@mixin screen-desktop-xl {
+    @media only screen and (max-width: $screen-desktop-xl) {
+        @content;
+    }
+}
+
+@mixin screen-desktop-l {
+    @media only screen and (max-width: $screen-desktop-l) {
+        @content;
+    }
+}
+
+@mixin screen-desktop {
+    @media only screen and (min-width: $screen-desktop) {
+        @content;
+    }
+}
+@mixin screen-mobile {
+    @media only screen and (max-width: $screen-mobile) {
+        @content;
+    }
+}
+@mixin screen-tab {
+    @media only screen and (max-width: $screen-tab) {
+        @content;
+    }
+}
+
+@mixin transform($transforms) {
+	   -moz-transform: $transforms;
+	     -o-transform: $transforms;
+	    -ms-transform: $transforms;
+	-webkit-transform: $transforms;
+            transform: $transforms;
+}
+@mixin transform-origin($origin) {
+    -webkit-transform-origin: $origin;
+       -moz-transform-origin: $origin;
+        -ms-transform-origin: $origin;
+            transform-origin: $origin;
+}
+
+@mixin transition($transition...) {
+    -moz-transition:    $transition;
+    -o-transition:      $transition;
+    -webkit-transition: $transition;
+    transition:         $transition;
+}
+@mixin transition-property($property...) {
+    -moz-transition-property:    $property;
+    -o-transition-property:      $property;
+    -webkit-transition-property: $property;
+    transition-property:         $property;
+}
+@mixin transition-duration($duration...) {
+    -moz-transition-property:    $duration;
+    -o-transition-property:      $duration;
+    -webkit-transition-property: $duration;
+    transition-property:         $duration;
+}
+@mixin transition-timing-function($timing...) {
+    -moz-transition-timing-function:    $timing;
+    -o-transition-timing-function:      $timing;
+    -webkit-transition-timing-function: $timing;
+    transition-timing-function:         $timing;
+}
+@mixin transition-delay($delay...) {
+    -moz-transition-delay:    $delay;
+    -o-transition-delay:      $delay;
+    -webkit-transition-delay: $delay;
+    transition-delay:         $delay;
+}
+
+
+@function is-valid-length($value) {
+    @return (type-of($value) == "number" and not unitless($value))
+        or (index(auto initial inherit 0, $value) != false);
+}

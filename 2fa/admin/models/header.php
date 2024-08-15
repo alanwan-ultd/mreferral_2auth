@@ -1,0 +1,14 @@
+<?php
+//$FILE_ROOT = '../../';  declare on self page
+include_once($FILE_ROOT.'inc/Setting.php'); $setting = new Setting();
+include_once($FILE_ROOT.'../application/plugins/Util.php'); $util = new Util();
+include_once($FILE_ROOT.'inc/function.php');
+include_once($FILE_ROOT.'../application/plugins/DB.php');
+include_once($FILE_ROOT.'../application/plugins/dbInit.php');
+
+$id = $util->returnDataNum('id', 'request');
+$lang = $util->purifyCheck($util->returnData('lang', 'get', 'en'));
+$pid = $util->returnDataNum('pid', 'request');
+//$cat = $util->purifyCheck($util->returnData('cat', 'request'));
+//$action = $util->purifyCheck($util->returnData('action', 'get'));
+?>

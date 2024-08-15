@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+.ck-content{font-family: 'Raleway', sans-serif;color:#4a4a4a;}
+.ck-content a {color: #a22037;}
+
+#news p{margin: auto;margin-bottom: 35px;max-width: 750px;font-size: 1rem;line-height: 1.8;}
+#news figure {max-width: 940px;margin: auto;position: relative;padding: 2rem 0 2rem 0;}
+#news p.remarks {font-size: 12px;}
+
+#other-page-container p,#other-page-container li {font-size: 1rem}
+#other-page-container p {margin-bottom: 1rem;font-weight: inherit}
+#other-page-container > ol {margin-left: 15px;list-style: decimal}
+#other-page-container > ol >li {margin-bottom: 1rem}
+#other-page-container > ol ol {margin-left: 15px;list-style: lower-alpha}

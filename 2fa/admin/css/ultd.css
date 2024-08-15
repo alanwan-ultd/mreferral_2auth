@@ -1,0 +1,327 @@
+.c-sidebar .c-sidebar-nav-link.c-active, .c-sidebar .c-active.c-sidebar-nav-dropdown-toggle{
+	background: rgba(255, 255, 255, 0.5);
+}
+html:not([dir=rtl]) .c-sidebar-nav-dropdown-items .c-sidebar-nav-dropdown-items .c-sidebar-nav-dropdown-toggle
+, html:not([dir=rtl]) .c-sidebar-nav-dropdown-items .c-sidebar-nav-dropdown-items .c-sidebar-nav-link{
+	padding-left: 70px;
+}
+.c-sidebar-nav-dropdown-toggle, .c-sidebar-nav-link{
+	white-space: normal;
+}
+.c-sidebar .c-sidebar-brand {
+	padding: 10px;
+	background: rgb(235,237,239);
+}
+
+.c-sidebar-brand img {
+	height: 50px;
+}
+
+/*image crop*/
+#imageCropModal .modal-body.just-open .img-container
+, #imageCropModal .modal-body.just-open .btn-group-ratio
+, #imageCropModal .modal-body.just-open .btn-group-crop{
+	display:none;
+}
+#imageCropModal .modal-body .img-container {
+	max-height: calc(100vh - 400px);
+}
+#imageCropModal .modal-body img{
+	max-width: 100%;
+}
+#imageCropModal .modal-body #cropDownload{
+	margin: 0 auto;
+	max-width: 640px;
+}
+#imageCropModal .modal-body #cropDownload img{
+	max-height: 640px;
+}
+/*image crop end*/
+
+/*list page*/
+.c-sidebar-nav-link{
+	white-space: normal;
+}
+.toolbar{
+	margin-bottom:10px;
+}
+.toolbar.mode-list .btn-list{
+	display: none;
+}
+
+.toolbar.mode-sort .btn-new, .toolbar.mode-sort .btn-sort{
+	display: none;
+}
+.toolbar.mode-sort + div + div.dataTables_scroll tbody tr td:nth-child(1){
+	cursor:move;
+}
+
+.multi-btn-group .btn {
+	margin: 5px;
+}
+
+.btn-copy-clipboard { 
+	position: relative;
+}
+
+.btn-copy-clipboard:after {
+    content: '複製到剪貼板';
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    width: 114px;
+    height: 36px;
+    color: #fff;
+    background: rgba(0,0,0,.72);
+    font-size: 10px;
+    line-height: 36px;
+    text-align: center;
+    border-radius: 3px;
+	transform: translateX(-50%);
+    z-index: 9999;
+}
+
+.btn-copy-clipboard:hover:before, .btn-copy-clipboard:hover:after {
+	display: block;
+}
+
+.btn-copy-clipboard:active, .btn-copy-clipboard:focus {
+    outline: none;
+}
+
+.btn-copy-clipboard:active:after, .btn-copy-clipboard:focus:after {
+	content: '複制成功!';
+}
+
+/*list page end*/
+
+/*edit page*/
+.btn:disabled {
+	cursor: default;
+}
+
+textarea{
+	resize: none;
+}
+.ck .ck-sticky-panel__content{
+	z-index: 9999!important;
+}
+.edit-page .card-footer{
+	position: fixed;
+	right: 0;
+	top: 56px;
+	border-bottom: 1px solid #d8dbe0;
+	border-left: 1px solid #d8dbe0;
+	z-index: 50;
+}
+.edit-page .card-footer .c-switch-label{
+	width:100px;
+	vertical-align: text-top;
+	margin-bottom: 0;
+}
+.edit-page .card-footer .c-switch-input:checked + .c-switch-slider:before{
+	left: calc(100% - 44px);
+}
+.edit-page .hidden_label{
+	visibility: hidden;
+	font-size: 0;
+	line-height: 0;
+}
+.edit-page .readonly{
+	background-color: #ebedef;
+}
+.edit-page .hidden{
+	display: none;
+}
+.edit-page .my-handle{
+	cursor: move !important;
+	background-color: #eee;
+}
+.edit-page .group-item:nth-child(even) *{
+	filter: brightness(98%);
+}
+.popover-body img.img{max-width:150px;max-height:150px;}
+.edit-page .btn-cashrebate-common-save {
+	float: right;
+}
+/*edit page end*/
+
+/*ckeditor*/
+.ck.ck-editor__editable{
+	max-height: 500px;
+}
+/*.ck.ck-editor__editable_inline>:last-child {
+	margin-bottom: inherit !important;
+}
+.ck.ck-editor__editable_inline>:first-child {
+	margin-top: inherit !important;
+}*/
+/*.ck.ck-editor__editable_inline, .ck.ck-editor__editable_inline a {
+	color: #000;
+}
+
+.ck.ck-editor__editable_inline hr {
+	border-color: #999999;
+	margin-top: 20px;
+	margin-bottom: 40px;
+}
+
+.ck.ck-editor__editable_inline a {
+	color: #a22037;
+	text-decoration: underline;
+	font-weight: bold;
+}
+.ck.ck-editor__editable_inline .text-small {
+	display: inline-block;
+	font-size: 14px;
+}
+.ck.ck-editor__editable_inline h2, .ck.ck-editor__editable_inline h3, .ck.ck-editor__editable_inline h4{
+	margin-bottom: 15px;
+}
+.ck.ck-editor__editable_inline p, .ck.ck-editor__editable_inline strong{
+	font-size: 16px;
+	line-height: 1.3;
+	margin-bottom: 20px !important;
+	font-style: normal;
+}
+.ck.ck-editor__editable_inline figure{
+    width: 100%;
+}
+.ck.ck-editor__editable_inline img{
+	text-align: left;
+	margin: 0 !important;
+	max-width: 100%;
+}
+.ck.ck-editor__editable_inline ul{
+	list-style: none;
+	margin-top: 10px;
+	margin-bottom: 30px;
+	padding: 0;
+
+}
+.ck.ck-editor__editable_inline ul li{
+	font-size: 16px;
+	line-height: 24px;
+	padding-left: 10px;
+	position: relative;
+}
+
+.ck.ck-editor__editable_inline  ul li:before{
+	content: '';
+	display: block;
+	position: absolute;
+	top: 10px;
+	left: 0;
+	background-color: #000;
+	width: 2px;
+	height: 2px;
+}
+
+.ck.ck-editor__editable_inline > ol{
+	list-style: none;
+	margin-top: 10px;
+	margin-bottom: 30px;
+	padding: 0;
+	counter-reset: my-li;
+}
+.ck.ck-editor__editable_inline > ol ul{
+	margin-left: 20px;
+}
+.ck.ck-editor__editable_inline > ol > li{
+	font-size: 16px;
+	line-height: 24px;
+	position: relative;
+	counter-increment: my-li;
+}
+.ck.ck-editor__editable_inline > ol > li > ol{
+	list-style-type: lower-alpha !important;
+
+}
+.ck.ck-editor__editable_inline > ol  ol li:before{
+	content: '' ;
+}
+.ck.ck-editor__editable_inline > ol > li:before{
+		content: counter(my-li)'. ';
+}
+.ck.ck-editor__editable_inline > blockquote{
+	margin-top: 40px;
+	border: 5px solid #ffd600;
+	padding: 45px 25px;
+	padding-bottom: 80px;
+	background-color: #fff;
+	font-weight: bold;
+	position: relative;
+	overflow: initial;
+	margin-bottom: 30px;
+}
+.ck.ck-editor__editable_inline > blockquote:after{
+	content: '';
+	display: block;
+	position: absolute;
+	right: 25px;
+	top: -40px;
+	background-image: url('../../images/case-studies/quote.png');
+	width: 80px;
+	height: 66px;
+	background-position: center;
+	background-size: cover;
+}*/
+/*ckeditor*/
+
+/*custom*/
+.hidden_inputFields .inputFields, .ref_images img{
+	display: none;
+}
+table .st-cell{
+	max-width: 150px;
+}
+table .dt-url{
+	display: none;
+}
+/*.edit-page .select-wrapper2 {
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 15px;
+}
+
+.edit-page .select-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 15px;
+}
+.edit-page .select-wrapper .form-group{
+	width: calc(25% - 10px);
+	margin: 0 5px;
+	min-width: 170px;
+}*/
+
+/* loader */
+#preloader {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: none;
+	z-index: 5000;
+}
+
+#preloader .overlay {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(255,255,255,0.8);
+}
+
+#preloader img {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 30px;
+	height: 30px;
+	transform: translate(-50%, -50%);
+	z-index: 5;
+}

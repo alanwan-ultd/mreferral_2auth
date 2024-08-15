@@ -1,0 +1,13 @@
+@import 'commonFile';
+
+@import url("reset.css");
+@import url("fontFace.css");
+@import url("common.css");
+
+.mobile, .mobile-block{display:none !important;}
+@include screen-tab {
+	.desktop{display:none !important;}
+	.mobile{display:inline-block !important;}
+	.mobile-block{display:block !important;}
+}
+

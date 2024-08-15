@@ -1,0 +1,22 @@
+var indexPage;
+
+$(function(){
+	window.indexPage = indexPage = new IndexPage();
+	
+});
+
+$(window).on('load', function(){
+    
+});
+
+$(window).on('resize', function(){
+    
+});
+
+class IndexPage{
+	constructor(){
+		
+	}
+	
+}
+

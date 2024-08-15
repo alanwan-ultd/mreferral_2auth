@@ -1,0 +1,18 @@
+# .gitignore
+/.htaccess
+Thumbs.db
+_assets/_nodejs/node_modules
+application/plugins/smarty/templates_c
+admin/inc/Setting.php
+adminXXXX/inc/Setting.php
+
+#media
+
+#### staging ####
+stagingxxx/application/plugins/smarty/templates_c
+stagingxxx/admin/inc/Setting.php
+stagingxxx/adminXXXX/inc/Setting.php
+
+#most updated
+#media
+admin/storage
