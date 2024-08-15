@@ -1,4 +1,8 @@
 <?php
+require __DIR__ . '/../vendor/autoload.php';
+use Sonata\GoogleAuthenticator\GoogleAuthenticator;
+use Sonata\GoogleAuthenticator\GoogleQrUrl;
+
 $FILE_ROOT = '../';
 $group = 'admin';
 $name = 'admin';
@@ -54,6 +58,8 @@ if($action == 'save'){  //insert/update record
 			'description' => $util->purifyCheck($util->returnData('desc', 'post')),
 			'groupId' => $util->purifyCheck($util->returnDataNum('group', 'post')),
 			'status' => $util->purifyCheck($util->returnData('status', 'post', 'P')),
+			'2fa_secret' => $util->purifyCheck($util->returnData('2fa_secret', 'post')),
+			'2fa_qrcode' => $util->purifyCheck($util->returnData('2fa_qrcode', 'post')),
 			//'approveDateTime' => date('Y-m-d H:i:s'), 
 			//'approveBy' => $_SESSION['login'], 
 			//'approve' => $util->purifyCheck($util->returnData('approve', 'post')),
@@ -70,6 +76,15 @@ if($action == 'save'){  //insert/update record
 			$data['lastLoginDateTime'] = '1000-01-01 00:00:00';
 			$data['createBy'] = $_SESSION['login'];
 			$data['createDateTime'] = date('Y-m-d H:i:s');
+
+			// generate 2fa secret and qrcode
+			$g = new GoogleAuthenticator();
+			$secret = $g->generateSecret();
+			$qrCodeUrl = GoogleQrUrl::generate($setting->GOOGLE_2FA_SITE_NAME, $secret, $setting->GOOGLE_2FA_SITE_DOMAIN);
+
+			$data['2fa_secret'] = $secret;
+			$data['2fa_qrcode'] = $qrCodeUrl;
+			// end of generate 2fa secret and qrcode
 		}
 		$password = $util->purifyCheck($util->returnData('password', 'post'));
 		if(trim($password) != ''){

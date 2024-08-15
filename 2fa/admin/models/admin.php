@@ -1,4 +1,9 @@
 <?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Sonata\GoogleAuthenticator\GoogleAuthenticator;
+
 $FILE_ROOT = '../';
 if(!isset($needIncludeHeader) || $needIncludeHeader === true) include_once('header.php');
 
@@ -13,12 +18,14 @@ class Admin{
 		$output = array(
 			'id'=>0,
 			'login'=>'',
+			'2fa_secret'=>'',
+			'2fa_qrcode'=>'',
 			'password'=>'',
 			'name'=>'',
 			'email'=>'',
 			'description'=>'',
 			'groupId'=>'',
-			'status'=>''
+			'status'=>'',
 		);
 		return $output;
 	}
@@ -65,16 +72,25 @@ class Admin{
 		return $outputAry;
 	}
 
-	public function login($login, $password){
+	public function login($login, $password, $authCode){
 		global $db, $setting;
 
 		$password = MD5($password);
 		$rst = $db->select($setting->DB_PREFIX.'adminuser u LEFT JOIN '.$setting->DB_PREFIX.'admingroup g ON u.groupId=g.id', 'u.login=:login AND u.password=:password AND u.status="A" AND u.deleted="N" AND g.status="A" AND g.deleted="N"'
 		, array(':login'=>$login, ':password'=>$password)
-		, 'u.id AS id, u.login AS login, u.groupId AS groupId, u.noOfLogin AS noOfLogin'
+		, 'u.id AS id, u.login AS login, u.groupId AS groupId, u.noOfLogin AS noOfLogin, u.2fa_secret AS 2fa_secret'
 		);
 
 		if($rst !== false && count($rst) == 1){
+			// check 2FA
+			$g = new GoogleAuthenticator();
+			$secret = $rst[0]['2fa_secret'];
+
+			if (!$g->checkCode($secret, $authCode)) {
+				return false;
+			}
+			// end of check 2FA
+
 			$_SESSION['id'] = $rst[0]['id'];
 			$_SESSION['login'] = $rst[0]['login'];
 			$_SESSION['groupId'] = $rst[0]['groupId'];

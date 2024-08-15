@@ -325,3 +325,21 @@ table .dt-url{
 	transform: translate(-50%, -50%);
 	z-index: 5;
 }
+
+/* 2fa-group */
+.google-2fa-group {
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	margin-top: 20px;
+}
+
+.google-2fa-group img {
+	margin-bottom: 10px;
+	max-width: 100%;
+}
+
+.btn-google-2fa-gen {
+	margin-top: 10px;
+}
+/* end of 2fa-group */

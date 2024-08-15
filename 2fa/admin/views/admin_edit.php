@@ -34,9 +34,12 @@ if(isset($_SESSION['id']) && $_SESSION['id'] == $id && $sectionPermission[0] == 
 }
 ?>
 <script src="js/edit.js?v=<?php echo $version; ?>"></script>
+<script src="js/admin-edit.js?v=<?php echo $version; ?>"></script>
 
 <!--script src="js/edit.php"></script-->
 <form id="myForm" name="myForm" class="form-horizontal">
+	<input type="hidden" id="2fa_secret" name="2fa_secret" value="<?php echo $item['2fa_secret'] ?? ''; ?>" />
+	<input type="hidden" id="2fa_qrcode" name="2fa_qrcode" value="<?php echo $item['2fa_qrcode'] ?? ''; ?>" />
 	<div class="col-lg-12 edit-page">
 		<a href="<?php echo $name; ?>_list.php" class="btn btn-back c-xhr-link"><i class="icon-arrow_back_ios mr-1"></i>Back</a>
 		<div class="card">
@@ -49,7 +52,25 @@ echo $form->htmlInputText('Name', 'name', $item['name'], '', 255, 'required');
 echo $form->htmlInputText('Email', 'email', $item['email'], '', 255);
 //echo $form->htmlTextarea('Description', 'desc', str_replace( '&', '&amp;', $item['desc']), 'Enter description', 'ckeditor', '');
 echo $form->htmlTextarea('Description', 'desc', $item['description'], '');
-$temp = $model->getListGroupOption(); echo $form->htmlSelectOption('Group', 'group', $temp, $item['groupId']);
+$temp = $model->getListGroupOption(); 
+echo $form->htmlSelectOption('Group', 'group', $temp, $item['groupId']);
+
+// 2fa QR code section
+$secret = $item['2fa_secret'];
+$qrcode = $item['2fa_qrcode'];
+// only allow super admin regen the qrcode
+$btnGenCode = $_SESSION['groupId'] === '1' ? "<div class='btn btn-sm btn-info btn-google-2fa-gen'>Regenerate Code</div>" : "";
+
+if($secret && $qrcode) {
+	$html = "
+	<div class='google-2fa-group'>
+		<label>Google 2FA</label>
+		<img src='{$qrcode}' alt='{$secret}' />
+		<div class='google-2fa-secret'>{$secret}</div>
+		{$btnGenCode}
+	</div>";
+	echo $html;
+}
 ?>
 			</div><!-- card body-->
 			<?php include_once('../inc/views/edit-footer.php'); ?>

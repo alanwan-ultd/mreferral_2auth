@@ -20,8 +20,9 @@ $adminModel = new Admin();
 $FILE_ROOT = '';  //re-define because change in admin model;
 $login = $util->purifyCheck($util->returnData('login', 'post'));
 $password = $util->purifyCheck($util->returnData('password', 'post'));
+$authCode = $util->purifyCheck($util->returnData('auth_code', 'post'));
 if($login != '' && $password != ''){
-	$result = $adminModel->login($login, $password);//var_dump($result);exit;
+	$result = $adminModel->login($login, $password, $authCode);//var_dump($result);exit;
 	if($result){
 		header('Location: ./'); exit();
 	}
@@ -55,7 +56,7 @@ include_once('inc/views/simple-header.php');
 						</div>
 						<input class="form-control" type="text" placeholder="Username" id="login" name="login" required>
 					</div>
-					<div class="input-group mb-4">
+					<div class="input-group mb-3">
 						<div class="input-group-prepend">
 							<span class="input-group-text">
 								<svg class="c-icon">
@@ -63,8 +64,18 @@ include_once('inc/views/simple-header.php');
 								</svg>
 							</span>
 						</div>
-							<input class="form-control" type="password" placeholder="Password" id="password" name="password" required>
+						<input class="form-control" type="password" placeholder="Password" id="password" name="password" required>
+					</div>
+					<div class="input-group mb-4">
+						<div class="input-group-prepend">
+							<span class="input-group-text">
+								<svg class="c-icon">
+									<use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-mobile"></use>
+								</svg>
+							</span>
 						</div>
+						<input class="form-control" type="text" placeholder="2FA Code" id="auth_code" name="auth_code" required>
+					</div>
 					<div class="row">
 						<div class="col-6">
 							<button class="btn btn-primary px-4" type="submit">Login</button>
