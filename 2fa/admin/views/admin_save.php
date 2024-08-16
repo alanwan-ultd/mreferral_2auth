@@ -6,6 +6,7 @@ use Sonata\GoogleAuthenticator\GoogleQrUrl;
 $FILE_ROOT = '../';
 $group = 'admin';
 $name = 'admin';
+$sectionPermissionByPass = true;
 include_once('../inc/views/header.php');
 
 if(isset($_SESSION['id']) && intval($_SESSION['id']) == intval($id) && $action == 'save'){

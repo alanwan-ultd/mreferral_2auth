@@ -13,7 +13,15 @@ if(isset($name)){
     if(isset($_SESSION['groupId']) && $_SESSION['groupId'] > 0){  //not login
 		//var_dump($sectionPermission);//exit();
 		if(!$sectionModel->checkCanView($sectionPermission)){  //all permissions are 0, read write, approve
-			echo renderPermissionLogin(); exit();
+			if(isset($sectionPermissionByPass) && $sectionPermissionByPass === true
+				&& isset($_SESSION['id']) && $_SESSION['id'] == $util->returnDataNum('id', 'request')
+			){
+				//admin_edit.php for same id user
+			}elseif($mode == 'js'){
+				//xxx_edit.php mode is "js"
+			}else{
+				echo renderPermissionLogin(); exit();
+			}
 		}else if($mySection === false){
 			echo 'Error: no this section.'; exit();
 		}

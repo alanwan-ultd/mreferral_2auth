@@ -2,6 +2,7 @@
 $FILE_ROOT = '../';
 $group = 'admin';
 $name = 'admin';
+$sectionPermissionByPass = true;
 include_once('../inc/views/header.php');
 include_once('../inc/HtmlBuilderCMS.php');
 $form = new HtmlBuilderCMS();
@@ -64,7 +65,7 @@ $btnGenCode = $_SESSION['groupId'] === '1' ? "<div class='btn btn-sm btn-info bt
 if($secret && $qrcode) {
 	$html = "
 	<div class='google-2fa-group'>
-		<label>Google 2FA</label>
+		<label>2FA</label>
 		<img src='{$qrcode}' alt='{$secret}' />
 		<div class='google-2fa-secret'>{$secret}</div>
 		{$btnGenCode}
