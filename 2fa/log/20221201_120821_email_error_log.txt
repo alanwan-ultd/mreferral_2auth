@@ -1,3 +1,0 @@
-SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
-27 - alan.wan@ultd.com.hk 
-
