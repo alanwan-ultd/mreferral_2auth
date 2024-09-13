@@ -34,6 +34,7 @@ CREATE TABLE `2fa_adminuser` (
   `password` varchar(32) NOT NULL,
   `2fa_secret` varchar(255) DEFAULT NULL,
   `2fa_qrcode` varchar(255) DEFAULT NULL,
+  `2fa_receive_email` char(1) DEFAULT NULL,
   `name` varchar(100) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `description` text NOT NULL,

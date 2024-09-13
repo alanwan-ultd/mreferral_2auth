@@ -53,8 +53,20 @@ echo $form->htmlInputText('Name', 'name', $item['name'], '', 255, 'required');
 echo $form->htmlInputText('Email', 'email', $item['email'], '', 255);
 //echo $form->htmlTextarea('Description', 'desc', str_replace( '&', '&amp;', $item['desc']), 'Enter description', 'ckeditor', '');
 echo $form->htmlTextarea('Description', 'desc', $item['description'], '');
+
+// update for only admin can change admin group
 $temp = $model->getListGroupOption(); 
-echo $form->htmlSelectOption('Group', 'group', $temp, $item['groupId']);
+if($item['groupId'] == 1){
+	echo $form->htmlSelectOption('Group', 'group', $temp, $item['groupId']);
+} else {
+	$groupTitle = '-';
+	$groupId = $item['groupId'];
+
+	$groupMap = array_column($temp, 1, 0);
+	$groupTitle = $groupMap[$groupId] ?? '-';
+
+	echo $form->htmlLabel('Group', $groupTitle);
+}
 
 // 2fa QR code section
 $secret = $item['2fa_secret'];
