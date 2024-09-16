@@ -32,6 +32,7 @@ CREATE TABLE `2fa_adminuser` (
   `id` int(11) NOT NULL,
   `login` varchar(50) NOT NULL,
   `password` varchar(32) NOT NULL,
+  `password_reset_token` varchar(255) DEFAULT NULL COMMENT 'For users setting up their password for the first time',
   `2fa_secret` varchar(255) DEFAULT NULL,
   `2fa_qrcode` varchar(255) DEFAULT NULL,
   `2fa_receive_email` char(1) DEFAULT NULL,

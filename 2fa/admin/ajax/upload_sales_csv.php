@@ -1,35 +1,6 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-?>
-	<!DOCTYPE html>
-	<html lang="en">
+header('Content-Type: application/json');
 
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Upload CSV File</title>
-	</head>
-
-	<body>
-		<h2>Upload Sales CSV File</h2>
-		<form action="" method="post" enctype="multipart/form-data" onsubmit="return confirmSubmit()">
-			<input type="file" name="csvFile" accept=".csv" required>
-			<input type="submit" value="Upload and Process">
-		</form>
-
-		<script>
-        function confirmSubmit() {
-            return confirm("Warning: This action may update existing sales items. Are you sure you want to proceed?");
-        }
-        </script>
-	</body>
-
-	</html>
-<?php
-	exit;
-}
-
-// If it's a POST request, process the uploaded file
 define('SALES_GROUP_ID', 2);
 define('DEFAULT_PASSWORD', 'default_password');
 
@@ -51,11 +22,10 @@ function saveQRCodeToDatabase($sales, $qrCodeUrl, $secret)
 {
 	global $db, $setting, $util;
 
-	$action = '';
-
 	$data = array(
 		'login' => $sales['id'],
-		'password' => md5(DEFAULT_PASSWORD),
+		'password' => '',
+		'password_reset_token' => $sales['password_reset_token'],
 		'2fa_secret' => $secret,
 		'2fa_qrcode' => $qrCodeUrl,
 		'2fa_receive_email' => 'N',
@@ -77,15 +47,12 @@ function saveQRCodeToDatabase($sales, $qrCodeUrl, $secret)
 	$rst = $db->select($setting->DB_PREFIX . 'adminuser', 'login=:login', array(':login' => $sales['id']));
 
 	if ($rst) {
-		$action = 'update';
-		$data['id'] = $rst[0]['id'];
-		$db->update($setting->DB_PREFIX . 'adminuser', $data, 'id=' . $rst[0]['id']);
+		// do nothing when user already exists
+		// $data['id'] = $rst[0]['id'];
+		// $db->update($setting->DB_PREFIX . 'adminuser', $data, 'id=' . $rst[0]['id']);
 	} else {
-		$action = 'insert';
 		$db->insert($setting->DB_PREFIX . 'adminuser', $data);
 	}
-
-	return $action;
 }
 
 // Check if a file was uploaded
@@ -103,6 +70,7 @@ if (isset($_FILES['csvFile']) && $_FILES['csvFile']['error'] == UPLOAD_ERR_OK) {
 		$sales['id'] = $row[0];
 		$sales['name'] = $row[1];
 		$sales['email'] = $row[2];
+		$sales['password_reset_token'] = generateUniqueResetToken($sales['id']);
 
 		// Generate secret key
 		$secret = $ga->generateSecret();
@@ -112,14 +80,19 @@ if (isset($_FILES['csvFile']) && $_FILES['csvFile']['error'] == UPLOAD_ERR_OK) {
 
 		// save record to database
 		$action = saveQRCodeToDatabase($sales, $qrCodeUrl, $secret);
-
-		echo "Success: {$sales['name']} ({$sales['email']}) [{$action}] <br>";
 	}
 
 	fclose($csvFile);
 
-	echo "<br>";
-	echo "All Records have been imported into the database.";
+	echo json_encode(['success' => true, 'message' => 'File uploaded and processed successfully.']);
 } else {
-	echo "Please upload a valid CSV file.";
+	echo json_encode(['success' => false, 'message' => 'Please upload a valid CSV file.']);
+}
+
+function generateUniqueResetToken($userId)
+{
+	$randomBytes = random_bytes(16); // Generate 16 random bytes
+	$randomString = bin2hex($randomBytes); // Convert to 32 character hex string
+	$uniqueToken = $userId . '_' . $randomString; // Combine user ID with random string
+	return $uniqueToken;
 }
