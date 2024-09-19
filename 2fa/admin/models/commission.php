@@ -11,7 +11,13 @@ class Commission
 	{
 		global $db, $setting;
 
-		$rst = $db->select($setting->DB_PREFIX . 'commission_origin', 'staff_no=:staff_no', array(':staff_no' => 'H2115681'), 'id, staff_no, commission_data, createDateTime');
+		if ($_SESSION['groupId'] == 1) {
+			// admin can view all commission records
+			$rst = $db->select($setting->DB_PREFIX . 'commission_origin', '', array(), 'id, staff_no, commission_data, createDateTime');
+		} else {
+			// sales can only view their own commission records
+			$rst = $db->select($setting->DB_PREFIX . 'commission_origin', 'staff_no=:staff_no', array(':staff_no' => $_SESSION['login']), 'id, staff_no, commission_data, createDateTime');
+		}
 		foreach ($rst as $key => $row) {
 			$commissionData = json_decode($row['commission_data'], true);
 			$rst[$key]['type_code'] = $commissionData['type_code'];
