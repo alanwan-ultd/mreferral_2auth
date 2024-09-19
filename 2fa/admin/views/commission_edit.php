@@ -41,6 +41,11 @@ $layout = assignCMSControlBtnPermission(
 );
 // $approvalTitle = $item[0]['title_i18n'];
 ?>
+<style>
+	.card-footer {
+		display: none;
+	}
+</style>
 <link rel="stylesheet" href="css/ckeditor/style.css" type="text/css"><!-- open if having ckeditor -->
 <script src="views/<?php echo $name; ?>_edit.php?mode=js"></script>
 <script src="js/popovers.js"></script>
