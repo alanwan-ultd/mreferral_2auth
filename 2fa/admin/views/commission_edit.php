@@ -66,7 +66,6 @@ $layout = assignCMSControlBtnPermission(
 			<div class="card-header"><strong>Itinerary Item</strong></div>
 			<div class="card-body">
 				<?php
-				echo $form->htmlLabel('Item ID', $item[0]['data']['id']);
 				echo $form->htmlLabel('Type Code', $item[0]['commission_data']['type_code']);
 				echo $form->htmlLabel('Application Code', $item[0]['commission_data']['application_code']);
 				echo $form->htmlLabel('mReferral Staff Name', $item[0]['commission_data']['mreferral_staff_name']);
