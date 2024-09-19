@@ -187,6 +187,13 @@ $CMSSection = array(
 		, "sort" => false
 		, "create" => true
 	)*/,
+	"commission" => array(
+		"name" => "Commission Info",
+		"link" => "commission_list.php",
+		"icon" => "cil-credit-card",
+		"sort" => false,
+		"create" => false
+	),
 	"admin" => array(
 		"name" => "Admin",
 		"link" => "group",
@@ -205,6 +212,13 @@ $CMSSection = array(
 				"icon" => "cil-people",
 				"sort" => false,
 				"create" => true
+			),
+			"uploadCommissionCSV" => array(
+				"name" => "Upload Commission CSV",
+				"link" => "uploadCommissionCSV_edit.php",
+				"icon" => "cil-file",
+				"sort" => false,
+				"create" => false
 			),
 			"uploadSalesCSV" => array(
 				"name" => "Upload Sales CSV",

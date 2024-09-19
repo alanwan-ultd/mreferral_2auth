@@ -11,6 +11,8 @@ include_once('../inc/views/header.php');
 
 <h2>Upload Sales CSV File</h2>
 <form id="uploadSalesCSVForm" method="post" enctype="multipart/form-data">
-  <input type="file" name="csvFile" accept=".csv" required>
-  <input type="submit" value="Upload and Process">
+	<input type="file" name="csvFile" accept=".csv" required>
+	<br />
+	<br />
+	<input type="submit" class="btn btn-primary" value="Upload and Process">
 </form>
