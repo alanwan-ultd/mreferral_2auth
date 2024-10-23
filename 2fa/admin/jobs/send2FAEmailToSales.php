@@ -12,6 +12,13 @@ $setting = new Setting(true);
 require_once __DIR__ . '/../inc/DB.php';
 require_once __DIR__ . '/../inc/dbInit.php';
 
+
+if (!(isset($_GET['key']) && $_GET['key'] === $setting->CRONJOB_KEY)) {
+	$data['message'] = 'The key is invalid';
+	echo json_encode($data);
+	exit;
+}
+
 // Construct the base URL using $_SERVER values
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
 $host = $_SERVER['HTTP_HOST'];
