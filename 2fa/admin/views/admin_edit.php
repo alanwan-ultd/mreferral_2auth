@@ -41,13 +41,15 @@ if(isset($_SESSION['id']) && $_SESSION['id'] == $id && $sectionPermission[0] == 
 <form id="myForm" name="myForm" class="form-horizontal">
 	<input type="hidden" id="2fa_secret" name="2fa_secret" value="<?php echo $item['2fa_secret'] ?? ''; ?>" />
 	<input type="hidden" id="2fa_qrcode" name="2fa_qrcode" value="<?php echo $item['2fa_qrcode'] ?? ''; ?>" />
+	<input type="hidden" id="login" name="login" value="<?php echo $item['login'] ?? ''; ?>" />
 	<div class="col-lg-12 edit-page">
 		<a href="<?php echo $name; ?>_list.php" class="btn btn-back c-xhr-link"><i class="icon-arrow_back_ios mr-1"></i>Back</a>
 		<div class="card">
 			<div class="card-header"><strong>Admin User</strong></div>
 			<div class="card-body">
 <?php
-echo $form->htmlInputText('Username', 'login', $item['login'], '', 255, 'required');
+// echo $form->htmlInputText('Username', 'login', $item['login'], '', 255, 'required');
+echo $form->htmlLabel('Username/Staff No.', $item['login']);
 echo $form->htmlInputText('Password<br>(Password should be 8-20 characters in length and should include at least one upper case letter, one number, and one special character.)', 'password', '', 'Enter password', 255);
 echo $form->htmlInputText('Name', 'name', $item['name'], '', 255, 'required');
 echo $form->htmlInputText('Email', 'email', $item['email'], '', 255);

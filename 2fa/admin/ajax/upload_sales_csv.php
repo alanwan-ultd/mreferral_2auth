@@ -65,21 +65,26 @@ if (isset($_FILES['csvFile']) && $_FILES['csvFile']['error'] == UPLOAD_ERR_OK) {
 
 	$ga = new GoogleAuthenticator();
 
-	while (($row = fgetcsv($csvFile)) !== false) {
-		$sales = [];
-		$sales['id'] = $row[0];
-		$sales['name'] = $row[1];
-		$sales['email'] = $row[2];
-		$sales['password_reset_token'] = generateUniqueResetToken($sales['id']);
+	while (($row = fgetcsv($csvFile, 1000, ',', '"')) !== false) {
+		// Check that the row contains the expected number of columns
+		if (count($row) === 3) {
+			$sales = [];
+			$sales['id'] = $row[0];
+			$sales['name'] = $row[1];
+			$sales['email'] = $row[2];
+			$sales['password_reset_token'] = generateUniqueResetToken($sales['id']);
 
-		// Generate secret key
-		$secret = $ga->generateSecret();
+			// Generate secret key
+			$secret = $ga->generateSecret();
 
-		// Generate QR code URL
-		$qrCodeUrl = GoogleQrUrl::generate("Mreferral - {$sales['name']}", $secret, 'www.mreferral.com');
+			// Generate QR code URL
+			$qrCodeUrl = GoogleQrUrl::generate("Mreferral - {$sales['name']}", $secret, 'www.mreferral.com');
 
-		// save record to database
-		$action = saveQRCodeToDatabase($sales, $qrCodeUrl, $secret);
+			// save record to database
+			$action = saveQRCodeToDatabase($sales, $qrCodeUrl, $secret);
+		} else {
+			var_dump("Skipping malformed row: " . print_r($row, true));
+		}
 	}
 
 	fclose($csvFile);
