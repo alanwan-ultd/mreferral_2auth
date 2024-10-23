@@ -63,15 +63,15 @@ class Setting
 	public $GOOGLE_2FA_SITE_DOMAIN = 'www.mreferral.com';
 
 	//mail
-	public $MAIL_HOST = "smtp.gmail.com";
-	public $MAIL_PORT = 587;
-	public $MAIL_SMTP_SECURE = "tls"; //tls:587, ssl:465
-	public $MAIL_SMTP_AUTH = true;
+	public $MAIL_HOST = "localhost";
+	public $MAIL_PORT = 25;
+	public $MAIL_SMTP_SECURE = ""; //tls:587, ssl:465
+	public $MAIL_SMTP_AUTH = false;
 	public $MAIL_SMTP_USERNAME = "";
 	public $MAIL_SMTP_PWD = "";
 	public $MAIL_CONTACT_FROM = [
-		'email' => 'test@test.com',
-		'name' => 'test'
+		'email' => 'appointment@mreferral.com',
+		'name' => 'Mreferral'
 	];
 	public $MAIL_CONTACT_TO = [
 		'email' => 'test@test.com',
