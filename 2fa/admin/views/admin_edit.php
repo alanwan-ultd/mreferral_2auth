@@ -48,8 +48,11 @@ if(isset($_SESSION['id']) && $_SESSION['id'] == $id && $sectionPermission[0] == 
 			<div class="card-header"><strong>Admin User</strong></div>
 			<div class="card-body">
 <?php
-// echo $form->htmlInputText('Username', 'login', $item['login'], '', 255, 'required');
-echo $form->htmlLabel('Username/Staff No.', $item['login']);
+if ($id === "") {
+	echo $form->htmlInputText('Username (Cannot be changed after creation)', 'login', $item['login'], '', 255, 'required');
+} else {
+	echo $form->htmlLabel('Username/Staff No.', $item['login']);
+}
 echo $form->htmlInputText('Password<br>(Password should be 8-20 characters in length and should include at least one upper case letter, one number, and one special character.)', 'password', '', 'Enter password', 255);
 echo $form->htmlInputText('Name', 'name', $item['name'], '', 255, 'required');
 echo $form->htmlInputText('Email', 'email', $item['email'], '', 255);
@@ -58,7 +61,7 @@ echo $form->htmlTextarea('Description', 'desc', $item['description'], '');
 
 // update for only admin can change admin group
 $temp = $model->getListGroupOption(); 
-if($item['groupId'] == 1){
+if($_SESSION['groupId'] == 1){
 	echo $form->htmlSelectOption('Group', 'group', $temp, $item['groupId']);
 } else {
 	$groupTitle = '-';

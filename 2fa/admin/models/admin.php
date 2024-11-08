@@ -66,7 +66,7 @@ class Admin
 	{
 		global $db, $setting;
 
-		$rst = $db->select($setting->DB_PREFIX . 'admingroup', 'deleted="N" ORDER BY title DESC', array(), 'id, title');
+		$rst = $db->select($setting->DB_PREFIX . 'admingroup', 'deleted="N" ORDER BY title ASC', array(), 'id, title');
 		return $rst;
 	}
 
