@@ -72,6 +72,8 @@ $layout = assignCMSControlBtnPermission(
 				echo $form->htmlLabel('Tel No', $item[0]['commission_data']['tel_no']);
 				echo $form->htmlLabel('Team Head', $item[0]['commission_data']['team_head']);
 				echo $form->htmlLabel('Team Head Phone No', $item[0]['commission_data']['team_head_phone_no']);
+				echo $form->htmlLabel('Drawdown Date', $item[0]['commission_data']['drawdown_date']);
+				echo $form->htmlLabel('Property Addr', $item[0]['commission_data']['property_addr']);
 				echo $form->htmlLabel('Payment Date', $item[0]['commission_data']['payment_date']);
 				echo $form->htmlLabel('Staff No', $item[0]['commission_data']['staff_no']);
 				echo $form->htmlLabel('Staff Name', $item[0]['commission_data']['staff_name']);

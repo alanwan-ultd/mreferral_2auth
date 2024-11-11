@@ -26,6 +26,8 @@ class Commission
 			$rst[$key]['tel_no'] = $commissionData['tel_no'];
 			$rst[$key]['team_head'] = $commissionData['team_head'];
 			$rst[$key]['team_head_phone_no'] = $commissionData['team_head_phone_no'];
+			$rst[$key]['drawdown_date'] = $commissionData['drawdown_date'];
+			$rst[$key]['property_addr'] = $commissionData['property_addr'];
 			$rst[$key]['payment_date'] = $commissionData['payment_date'];
 			// $dateString = preg_replace('/\.\d+/', '', $commissionData['payment_date']); // Remove fractional seconds
 			// $paymentDate = new DateTime($dateString);

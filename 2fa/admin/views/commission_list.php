@@ -14,8 +14,11 @@ if ($mode == 'js') {
 		{'data':'id'}
 		, {'data':'type_code'}
 		, {'data':'application_code'}
+		, {'data':'property_addr'}
 		, {'data':'mreferral_staff_name'}
+		, {'data':'drawdown_date'}
 		, {'data':'payment_date'}
+		, {'data':'comm_to_pc'}
 		, {'data':'action', "orderable":false, 'class':'dt-center'}
 	];
 	var columnDefs = [
@@ -49,8 +52,11 @@ if ($mode == 'js') {
 						<th>ID</th>
 						<th>Type Code</th>
 						<th>Application Code</th>
+						<th>Property Address</th>
 						<th>mReferral Staff Name</th>
+						<th>Drawdown Date</th>
 						<th>Payment Date</th>
+						<th>Comm to PC</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -59,8 +65,11 @@ if ($mode == 'js') {
 						<th>ID</th>
 						<th>Type Code</th>
 						<th>Application Code</th>
+						<th>Property Address</th>
 						<th>mReferral Staff Name</th>
+						<th>Drawdown Date</th>
 						<th>Payment Date</th>
+						<th>Comm to PC</th>
 						<th>Action</th>
 					</tr>
 				</tfoot>
