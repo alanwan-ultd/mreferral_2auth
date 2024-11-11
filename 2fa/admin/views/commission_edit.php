@@ -59,7 +59,7 @@ $layout = assignCMSControlBtnPermission(
 			<input type="hidden" name="approval_id" value="<?php echo $approval_id; ?>">
 		<?php } else { ?>
 			<!-- a href="<?php echo $name; ?>_list.php" class="btn btn-back c-xhr-link"><i class="icon-arrow_back_ios mr-1"></i>Back</!-- -->
-			<a href="<?php echo $name; ?>_list.php<?php echo $backUrl; ?>" class="btn btn-back c-xhr-link"><i class="icon-arrow_back_ios mr-1"></i>Back</a>
+			<a href="<?php echo $name; ?>_list.php" class="btn btn-back c-xhr-link"><i class="icon-arrow_back_ios mr-1"></i>Back</a>
 		<?php } ?>
 
 		<div class="card">
