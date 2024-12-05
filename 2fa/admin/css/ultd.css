@@ -343,3 +343,45 @@ table .dt-url{
 	margin-top: 10px;
 }
 /* end of 2fa-group */
+
+/* filter */
+.commission-filter {
+	padding: 15px; 
+	border: 1px solid #ccc;
+	text-align: left ;
+}
+
+.commission-filter .filter-group-wrapper {
+	display: none;
+}
+
+.commission-filter .filter-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+}
+
+.commission-filter h6 {
+	margin-bottom: 0;
+}
+
+.commission-filter .filter-header .btn-collapse {
+	transition: all .3s;
+}
+
+.commission-filter .filter-header .btn-collapse.open {
+	transform: rotate(180deg);
+}
+
+.commission-filter select,
+.commission-filter input { 
+	max-width: 100%;
+}
+
+#totalAmountDisplay {
+	margin-top: 30px;
+    margin-bottom: -40px;
+    font-size: 16px;
+}
+/* end of filter */

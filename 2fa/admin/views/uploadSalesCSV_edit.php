@@ -10,6 +10,10 @@ include_once('../inc/views/header.php');
 <script src="js/upload-sales-csv.js?v=<?php echo $version; ?>"></script>
 
 <h2>Upload Sales CSV File</h2>
+<div><b style="color: red;">Uploading a Sales CSV file will accumulate items.</b></div>
+<br />
+<br />
+<br />
 <form id="uploadSalesCSVForm" method="post" enctype="multipart/form-data">
 	<input type="file" name="csvFile" accept=".csv" required>
 	<br />

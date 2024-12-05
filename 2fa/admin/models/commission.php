@@ -40,11 +40,37 @@ class Commission
 			$rst[$key]['department_head_name'] = $commissionData['department_head_name'];
 			$rst[$key]['department_head_bank_account'] = $commissionData['department_head_bank_account'];
 			$rst[$key]['commission_branch_mgr'] = $commissionData['commission_branch_mgr'];
+			// Format the date to "DD/MM/YYYY"
+			$date = new DateTime($row['createDateTime']);
+			$rst[$key]['create_datetime_display'] =  $date->format('d/m/Y');
 			$rst[$key]['branch'] = $commissionData['branch'];
 			$rst[$key]['action'] = renderListActionBtn($name . '_edit', $row['id']);
 		}
 
 		return $rst;
+	}
+
+	public function getTotalAmount()
+	{
+		global $db, $setting;
+
+		$totalAmount = 0;
+
+		if ($_SESSION['groupId'] == 1) {
+			// admin can view all commission records
+			$rst = $db->select($setting->DB_PREFIX . 'commission_origin', '', array(), 'id, staff_no, commission_data, createDateTime');
+		} else {
+			// sales can only view their own commission records
+			$rst = $db->select($setting->DB_PREFIX . 'commission_origin', 'staff_no=:staff_no', array(':staff_no' => $_SESSION['login']), 'id, staff_no, commission_data, createDateTime');
+		}
+
+
+		foreach ($rst as $key => $row) {
+			$commissionData = json_decode($row['commission_data'], true);
+			$totalAmount += (float)$commissionData['comm_to_pc'];
+		}
+
+		return $totalAmount;
 	}
 
 	public function getOriginItemById($id)
@@ -59,6 +85,9 @@ class Commission
 
 		foreach ($rst as $key => $row) {
 			$rst[$key]['commission_data'] = json_decode($row['commission_data'], true);
+			// Format the date to "DD/MM/YYYY"
+			$date = new DateTime($row['createDateTime']);
+			$rst[$key]['create_datetime_display'] =  $date->format('d/m/Y');
 		}
 
 		return $rst;

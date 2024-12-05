@@ -78,12 +78,13 @@ $layout = assignCMSControlBtnPermission(
 				echo $form->htmlLabel('Staff No', $item[0]['commission_data']['staff_no']);
 				echo $form->htmlLabel('Staff Name', $item[0]['commission_data']['staff_name']);
 				echo $form->htmlLabel('Staff Bank Acc', $item[0]['commission_data']['staff_bank_acc']);
-				echo $form->htmlLabel('Comm To PC', $item[0]['commission_data']['comm_to_pc']);
-				echo $form->htmlLabel('Department Head ID', $item[0]['commission_data']['department_head_id']);
+				echo $form->htmlLabel('Commission', $item[0]['commission_data']['comm_to_pc']);
+				// echo $form->htmlLabel('Department Head ID', $item[0]['commission_data']['department_head_id']);
 				echo $form->htmlLabel('Department Head Name', $item[0]['commission_data']['department_head_name']);
-				echo $form->htmlLabel('Department Head Bank Account', $item[0]['commission_data']['department_head_bank_account']);
-				echo $form->htmlLabel('Commission Branch Mgr', $item[0]['commission_data']['commission_branch_mgr']);
+				// echo $form->htmlLabel('Department Head Bank Account', $item[0]['commission_data']['department_head_bank_account']);
+				// echo $form->htmlLabel('Commission Branch Mgr', $item[0]['commission_data']['commission_branch_mgr']);
 				echo $form->htmlLabel('Branch', $item[0]['commission_data']['branch']);
+				echo $form->htmlLabel('Upload Date', $item[0]['create_datetime_display']);
 				?>
 				<input name="status" type="hidden" value="A" />
 			</div><!-- card body-->
