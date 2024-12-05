@@ -1,6 +1,6 @@
 // allowFilter for cash rebate form only
-let allowFilter = ['2faCommissionTable'];
-const fieldLastModifyDate = 5;
+var allowFilter = ['2faCommissionTable'];
+var fieldLastModifyDate = 5;
 
 $.fn.dataTable.ext.search.push(
 	function (settings, data, dataIndex) {
@@ -31,6 +31,7 @@ $.fn.dataTable.ext.search.push(
 );
 
 $(function () {
+	console.log('test 123');
 	// check cookies exist to set filter value
 	initFilterPanel();
 	// calculateTotal();

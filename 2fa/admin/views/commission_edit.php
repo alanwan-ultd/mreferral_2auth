@@ -46,11 +46,10 @@ $layout = assignCMSControlBtnPermission(
 		display: none;
 	}
 </style>
-<link rel="stylesheet" href="css/ckeditor/style.css" type="text/css"><!-- open if having ckeditor -->
+<!-- <link rel="stylesheet" href="css/ckeditor/style.css" type="text/css"> --><!-- open if having ckeditor -->
 <script src="views/<?php echo $name; ?>_edit.php?mode=js"></script>
 <script src="js/popovers.js"></script>
 <script src="js/edit.js"></script>
-<script src="js/location-google-map.js?v=3"></script>
 <!--script src="js/edit.php"></script-->
 <form id="myForm" name="myForm" class="form-horizontal" action="views/<?php echo $name; ?>_save.php">
 	<div class="col-lg-12 edit-page">
